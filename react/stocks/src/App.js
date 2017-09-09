@@ -55,19 +55,33 @@ class App extends Component {
             this.state.actionsAndConditions.push({type: 'ticker', value: action.ticker});
             // Add amount from ACTION
             this.state.actionsAndConditions.push({type: 'amount', value: action.amount});
-            // Add action from ACTION
-            this.state.actionsAndConditions.push({type: 'action', value: action.action});
+            // Add amount_unit from ACTION
+            this.state.actionsAndConditions.push({type: 'amount_unit', value: action.amount_unit});
+            // Add position from ACTION
+            this.state.actionsAndConditions.push({type: 'position', value: action.position});
 
+            // // Add action from ACTION
+            // this.state.actionsAndConditions.push({type: 'action', value: action.action});
+
+            // Add type from CONDITION
+            this.state.actionsAndConditions.push({type: 'type', value: condition.type})
             // Add ticker from CONDITION
-            this.state.actionsAndConditions.push({type: 'ticker', value: condition.ticker});
-            // Add amount from CONDITION
-            this.state.actionsAndConditions.push({type: 'amount', value: condition.amount});
-            // Add verb from CONDITION
-            this.state.actionsAndConditions.push({type: 'verb', value: condition.verb});
-            // Add time from CONDITION
-            this.state.actionsAndConditions.push({type: 'time', value: condition.time});
-            // Add isPercentage from CONDITION
-            this.state.actionsAndConditions.push({type: 'isPercentage', value: condition.isPercentage});
+            this.state.actionsAndConditions.push({type: 'ticker', value: condition.payload.stocks[0].ticker});
+            // Add price from CONDITION
+            this.state.actionsAndConditions.push({type: 'price', value: condition.payload.stocks[1].field})
+            // Add threshold for CONDITION
+            this.state.actionsAndConditions.push({type: 'threshold', value: condition.threshold});
+            // Add threshold_type for CONDITION
+            this.state.actionsAndConditions.push({type: 'threshold_type', value: condition.threshold_type})
+
+            // // Add amount from CONDITION
+            // this.state.actionsAndConditions.push({type: 'amount', value: condition.amount});
+            // // Add verb from CONDITION
+            // this.state.actionsAndConditions.push({type: 'verb', value: condition.verb});
+            // // Add time from CONDITION
+            // this.state.actionsAndConditions.push({type: 'time', value: condition.time});
+            // // Add isPercentage from CONDITION
+            // this.state.actionsAndConditions.push({type: 'isPercentage', value: condition.isPercentage});
 
             this.setState({currentText: this.highlightCurrentText()});
              } catch (e) {}
@@ -91,10 +105,12 @@ class App extends Component {
         if (word === actionsAndConditions[j].value) {
           if (actionsAndConditions[j].type === 'ticker') tokenizeQuery[i] = '<TICKER>';
           if (actionsAndConditions[j].type === 'amount') tokenizeQuery[i] = '<AMOUNT>';
-          if (actionsAndConditions[j].type === 'action') tokenizeQuery[i] = '<ACTION>';
-          if (actionsAndConditions[j].type === 'verb') tokenizeQuery[i] = '<VERB>';
-          if (actionsAndConditions[j].type === 'time') tokenizeQuery[i] = '<TIME>';
-          if (actionsAndConditions[j].type === 'isPercentage') tokenizeQuery[i] = '<isPercentage>'
+          if (actionsAndConditions[j].type === 'amount_unit') tokenizeQuery[i] = '<amount_unit>';
+          if (actionsAndConditions[j].type === 'position') tokenizeQuery[i] = '<position>';
+          if (actionsAndConditions[j].type === 'type') tokenizeQuery[i] = '<type>';
+          if (actionsAndConditions[j].type === 'price') tokenizeQuery[i] = '<price>';
+          if (actionsAndConditions[j].type === 'threshold') tokenizeQuery[i] = '<threshold>';
+          if (actionsAndConditions[j].type === 'threshold_type') tokenizeQuery[i] = '<threshold_type>';
         }
       }
     }

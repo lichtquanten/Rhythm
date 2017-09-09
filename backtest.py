@@ -7,11 +7,13 @@ import pandas as pd
 def backtest(algo_config):
     def handle_data(context, data):
         asset_value = context.portfolio.cash
-        for symbol in list(context.portfolio.positions):
-            asset_value += context.portfolio.positions[symbol].amount*data.current(symbol, 'price');
+        for key in list(context.portfolio.positions):
+            asset_value += context.portfolio.positions[key].amount*data.current(key, 'price');
 
         for algo in algo_config:
             should_act = False
+
+            #CONDITION COMMAND CENTER
             payload = algo['condition']['payload']
             if algo['condition']['type'] == 'stocky':
                 values = []
@@ -27,21 +29,59 @@ def backtest(algo_config):
                 # print(str(diff))
                 if payload['threshold_type'] == 'percent':
                     diff = diff/values[1]*100
-                    # print('PCENT: ' + str(diff))
                 if payload['threshold'] > 0:
                     should_act = diff > payload['threshold']
                 else:
                     should_act = diff < payload['threshold']
 
+            #ACTION COMMAND CENTER
             if should_act:
                 ticker_symbol = symbol(algo['action']['ticker'])
                 target_change = algo['action']['amount']
                 unit = algo['action']['amount_unit']
                 current_amount = context.portfolio.positions[ticker_symbol].amount
-                price = data.current(ticker_symbol)
+                price = data.current(ticker_symbol, 'price')
 
-                if (algo['position'] == 'long'):
-                    pass
+                if algo['action']['position'] == 'long':
+                    if target_change > 0: #long more
+                        if current_amount < 0: #if currently shorting, get rid of short shares
+                            order(current_amount)
+                            asset_value += current_amount*price
+                        if unit == 'dollars':
+                            val = target_change if target_change < asset_value else asset_value
+                            order_value(ticker_symbol, val)
+                            asset_value -= val
+                        elif unit == 'shares':
+                            val = target_change if target_change*price < asset_value else asset_value/price
+                            order(ticker_symbol, val)
+                            asset_value -= val*price
+                        elif unit == 'percent_assets':
+                            val = target_change*asset_value if target_change < 1 else asset_value
+                            order_value(ticker_symbol, val)
+                            asset_value -= val
+                        elif unit == 'percent_ownership':
+                            val = current_amount*target_change*price if current_amount*target_change*price < asset_value else asset_value
+                            order_value(ticker_symbol, val)
+                            asset_value -= val
+                    elif target_change < 0: #long less
+                        if not current_amount < 0: #if currently shorting, longing less is meaningless
+                            if unit == 'dollars':
+                                val = target_change if abs(target_change) < current_amount*price else -current_amount*price
+                                order_value(ticker_symbol, val)
+                                asset_value += val
+                            elif unit == 'shares':
+                                val = target_change if abs(target_change) < current_amount else -current_amount
+                                order(ticker_symbol, val)
+                                asset_value += val*price
+                            # not sure about this guy
+                            elif unit == 'percent_assets':
+                                val = target_change*asset_value if abs(target_change) < 1  and abs(target_change)*asset_value < current_amount*price else -current_amount*price
+                                order_value(ticker_symbol, val)
+                                asset_value += val
+                            elif unit == 'percent_ownership':
+                                val = current_amount*target_change*price if abs(target_change) < 1 and current_amount*abs(target_change)*price < asset_value else -current_amount*price
+                                order_value(ticker_symbol, -val)
+                                asset_value += val
                 #shorting
                 else:
                     if target_change > 0: #short more
@@ -59,7 +99,7 @@ def backtest(algo_config):
                                 asset_value -= val*price
                             elif unit == 'percent_assets':
                                 val = target_change*asset_value if target_change < 1 else asset_value
-                                order_percent(ticker_symbol, -val)
+                                order_value(ticker_symbol, -val)
                                 asset_value -= val
                             elif unit == 'percent_ownership':
                                 val = current_amount*target_change*price if current_amount*target_change*price < asset_value else asset_value
@@ -76,11 +116,11 @@ def backtest(algo_config):
                                 order(ticker_symbol, val)
                                 asset_value += val*price
                             elif unit == 'percent_assets':
-                                val = abs(asset_value)*abs(target_change) if asset_value*abs(target_change) < abs(current_amount)*price else abs(current_amount)*price
+                                val = abs(asset_value)*abs(target_change) if abs(target_change) < 1 and abs(asset_value)*abs(target_change) < abs(current_amount)*price else abs(current_amount)*price
                                 order_value(ticker_symbol, val)
                                 asset_value += val
                             elif unit == 'percent_ownership':
-                                val = current_amount*target_change if current_amount*target_change < current_amount else current_amount
+                                val = abs(current_amount)*abs(target_change) if abs(current_amount)*abs(target_change) < abs(current_amount) else abs(current_amount)
                                 order(ticker_symbol, val)
                                 asset_value += val
 
@@ -126,39 +166,39 @@ if __name__ == "__main__":
     demo_algo_config = [
         {
             'action': {
-                'ticker': 'MSFT',
-                'amount': 200,
-                'amount_unit': 'dollars',
-                'position': 'short'
+                'ticker': 'AMZN',
+                'amount': 2,
+                'amount_unit': 'shares',
+                'position': 'long'
             },
             'condition': {
                 'type': 'stocky',
                 'payload': {
                     'stocks': [
-                        { 'ticker': 'MSFT', 'field': 'price' },
-                        { 'ticker': 'MSFT', 'field': 'close_price' }
+                        { 'ticker': 'AMZN', 'field': 'price' },
+                        { 'ticker': 'AMZN', 'field': 'close_price' }
                     ],
-                    'threshold': .5,
+                    'threshold': 1.2,
                     'threshold_type': 'percent'
                 }
              }
         },
         {
             'action': {
-                'ticker': 'MSFT',
-                'amount': -50,
+                'ticker': 'AMZN',
+                'amount': -.5,
                 'amount_unit': 'percent',
-                'position': 'short'
+                'position': 'long'
             },
             'condition': {
                 'type': 'stocky',
                 'payload': {
                     'stocks': [
-                        { 'ticker': 'MSFT', 'field': 'price' },
-                        { 'ticker': 'MSFT', 'field': 'close_price' }
+                        { 'ticker': 'AMZN', 'field': 'price' },
+                        { 'ticker': 'AMZN', 'field': 'close_price' }
                     ],
-                'threshold': -10,
-                'threshold_type': 'percent'
+                    'threshold': -.5,
+                    'threshold_type': 'percent'
                 }
             }
         }

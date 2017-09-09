@@ -28,7 +28,8 @@ def splitString(message):
             analyzeString(i, "condition")
         analyzeString(strings[1], "action")
 
-    return json.dumps({**ac.toJSON(), **con.toJSON()})
+    print(json.dumps({**con.toJSON(), **ac.toJSON()}))
+    return {**con.toJSON(), **ac.toJSON()}
 
 
 def analyzeString(message, condition):
@@ -80,4 +81,3 @@ def analyzeString(message, condition):
     else:
         ac.createAction(tic, amount, amount_type, verb)
 
-print(splitString("If MSFT falls by $34 from yesterday AND TSLA gains 3% from purchase, buy 10 shares of AAPL"))

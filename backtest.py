@@ -156,11 +156,12 @@ def analyze(context=None, results=None):
         plt.ylabel('Price of ' + key)
 
     transactionPoints = results.loc[results['capital_used'] != 0]
+    transactionPoints = transactionPoints.reset_index()
 
     plt.figure()
     plt.suptitle('Portfolio Value vs Time')
     plt.plot(results.portfolio_value)
-    plt.plot_date(transactionPoints.portfolio_value)
+    plt.plot_date(transactionPoints.index, transactionPoints.portfolio_value )
     plt.xlabel('Time')
     plt.ylabel('Portfolio Value')
     plt.show()

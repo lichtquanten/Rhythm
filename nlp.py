@@ -8,9 +8,10 @@ import stocksdata
 
 stockTickers = [x.lower() for x in list(stocksdata.stocks.keys())]
 stockTimes = ['yesterday', 'purchas', 'bought']
-stockDecisions = ["fall", 'gain', 'rise', 'drop']
+stockDecisionsPositive = ['gain', 'rise', 'up', 'win']
+stockDecisionsNegative = ['fall', 'drop', 'lose', 'down']
 stockActions = ["buy", "sell", "short"]
-stockTriggers = stockTimes + stockDecisions + stockActions
+stockTriggers = stockTimes + stockDecisionsPositive + stockDecisionsNegative + stockActions
 
 
 ac = Action()
@@ -30,6 +31,7 @@ def analyzeString(message, condition):
     amount = ""
     verb = ""
     time = ""
+    positive = False
 
     user_input = message
     letters = re.sub("[^a-zA-Z0-9%]", " ", user_input)
@@ -52,7 +54,13 @@ def analyzeString(message, condition):
             amount = i[0]
         elif i[0] == '%':
             amount += "%"
-        elif i[0] in stockDecisions or i[0] in stockActions:
+        elif i[0] in stockDecisionsPositive:
+            verb = i[0]
+            type = True
+        elif i[0] in stockDecisionsNegative:
+            verb = i[0]
+            type = False
+        elif i[0] in stockActions:
             verb = i[0]
         elif i[0] in stockTimes:
             if i[0] == "purchas":
@@ -60,7 +68,7 @@ def analyzeString(message, condition):
             else:
                 time = i[0]
     if condition == "decision":
-        con.createCondition(tic, amount, verb, time)
+        con.createCondition(tic, amount, verb, time, type)
     else:
         ac.createAction(tic, amount, verb)
 

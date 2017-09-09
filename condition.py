@@ -4,34 +4,25 @@ class Condition:
     verb = ""
     time = ""
     cond = ""
-    person = ""
+    amount_type = ""
     is_percentage = ""
-    is_twitter = ""
+
     def __init__(self):
         pass
 
-    def createCondition(self, ticker, amount, verb, time, type, person, is_twitter):
+    def createCondition(self, ticker, amount, amount_type, verb, time, type):
         self.ticker = ticker
-        self.amount = amount
+
         self.verb = verb
-        self.time = time
-        self.person = person
-
+        self.amount_type = amount_type
         if type == True:
-            self.cond = "positive"
+            self.amount = int(amount)
         else:
-            self.cond = "negative"
-        self.type = type
-
-        if is_twitter == True:
-            self.is_twitter = True
-            self.is_percentage = False
+            self.amount = -1 * int(amount)
+        if time == "yesterday" or time == "close":
+            self.time = "price"
         else:
-            if amount[-1:] == "%":
-                self.is_percentage = True
-            else:
-                self.is_percentage = False
-            self.is_twitter = False
+            self.time = "close_price"
 
     def print(self):
         print("CONDITION: " + self.ticker.upper() + " " + self.verb + " by " + self.amount + " from " + self.time + ". This is a " + self.cond + " change")
@@ -40,4 +31,17 @@ class Condition:
         return "CONDITION: " + self.ticker.upper() + " " + self.verb + " by " + self.amount + " from " + self.time + ". This is a " + self.cond + " change"
 
     def toJSON(self):
-        return {"condition":{"ticker": self.ticker.upper(), "amount": self.amount, "verb": self.cond, "time":self.time, "is_percentage": self.is_percentage, "is_twitter": self.is_twitter, "person": self.person}}
+        return {"condition":{'type': 'stocky', 'payload':{'stocks':[{"ticker": self.ticker.upper(), "field":self.time}], 'threshold': self.amount, 'threshold_type':self.amount_type}}}
+""" 
+'condition': {
+        'type': 'stocky',
+        'payload': {
+            'stocks': [
+                {'ticker': 'MSFT', 'field': 'price'},
+                {'ticker': 'MSFT', 'field': 'close_price'}
+            ],
+            'threshold': -10,
+            'threshold_type': 'percent'
+        }
+    }
+"""

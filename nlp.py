@@ -9,7 +9,7 @@ import json
 import tweepy
 
 stockTickers = [x.lower() for x in list(stocksdata.stocks.keys())]
-stockTimes = ['yesterday', 'purchas', 'bought']
+stockTimes = ['yesterday', 'close', 'purchas', 'bought']
 stockDecisionsPositive = ['gain', 'rise', 'up', 'win']
 stockDecisionsNegative = ['fall', 'drop', 'lose', 'down']
 stockActions = ["buy", "sell", "short"]
@@ -34,6 +34,7 @@ def analyzeString(message, condition):
     tic = ""
     amount = ""
     verb = ""
+    amount_type = "shares"
     time = ""
     twitter_person = ""
     is_twitter = False
@@ -55,15 +56,16 @@ def analyzeString(message, condition):
     for i in pos:
         if i[0] in stockTriggers+stockTickers+stockSymbols or i[1] == 'CD':
             finalTerms.append(i)
+    print(finalTerms)
     for i in finalTerms:
         if i[0] in stockTickers:
             tic = i[0]
         elif i[1] == 'CD':
             amount += i[0]
         elif i[0] == '%':
-            amount += "%"
+            amount_type = "percent"
         elif i[0] == '$':
-            amount += "$"
+            amount_type = "dollars"
         elif i[0] in stockDecisionsPositive:
             verb = i[0]
             type = True
@@ -79,9 +81,8 @@ def analyzeString(message, condition):
                 time = i[0]
     if condition == "decision":
 
-        con.createCondition(tic, amount, verb, time, type, twitter_person, is_twitter)
+        con.createCondition(tic, amount, amount_type, verb, time, type)
     else:
-        ac.createAction(tic, amount, verb)
+        ac.createAction(tic, amount, amount_type, verb)
 
-print(splitString("If @realDonaldTrump tweets about stocks dropping, short 10 shares of that stock "))
-print(splitString("If MSFT falls by 5% from yesterday, buy 10 AAPL Shares"))
+print(splitString("If MSFT falls by $5 from yesterday, buy 10 shares of AAPL"))

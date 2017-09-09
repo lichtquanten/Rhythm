@@ -29,6 +29,7 @@ def backtest(algo_config):
                 # print(str(diff))
                 if payload['threshold_type'] == 'percent':
                     diff = diff/values[1]*100
+                # Todo/sean
                 if payload['threshold'] > 0:
                     should_act = diff > payload['threshold']
                 else:
@@ -39,13 +40,16 @@ def backtest(algo_config):
                 ticker_symbol = symbol(algo['action']['ticker'])
                 target_change = algo['action']['amount']
                 unit = algo['action']['amount_unit']
+                # current_share_count
                 current_amount = context.portfolio.positions[ticker_symbol].amount
                 price = data.current(ticker_symbol, 'price')
 
+                # long function
+                # clean up asset_value -= val
                 if algo['action']['position'] == 'long':
                     if target_change > 0: #long more
                         if current_amount < 0: #if currently shorting, get rid of short shares
-                            order(current_amount)
+                            order(ticker_symbol, abs(current_amount))
                             asset_value += current_amount*price
                         if unit == 'dollars':
                             val = target_change if target_change < asset_value else asset_value
@@ -79,8 +83,8 @@ def backtest(algo_config):
                                 order_value(ticker_symbol, val)
                                 asset_value += val
                             elif unit == 'percent_ownership':
-                                val = current_amount*target_change*price if abs(target_change) < 1 and current_amount*abs(target_change)*price < asset_value else -current_amount*price
-                                order_value(ticker_symbol, -val)
+                                val = current_amount*target_change*price if abs(target_change) < 1 else -current_amount*price
+                                order_value(ticker_symbol, val)
                                 asset_value += val
                 #shorting
                 else:
@@ -106,7 +110,8 @@ def backtest(algo_config):
                                 order_value(ticker_symbol, -val)
                                 asset_value -= val
                     elif target_change < 0: #short less
-                        if not current_amount < 0: #if currently longing, shorting less is meaningless
+                        # double check
+                        if current_amount < 0: #if currently longing, shorting less is meaningless
                             if unit == 'dollars':
                                 val = abs(target_change)/price if abs(target_change)/price < abs(current_amount) else abs(current_amount)
                                 order(ticker_symbol, val)
@@ -116,11 +121,12 @@ def backtest(algo_config):
                                 order(ticker_symbol, val)
                                 asset_value += val*price
                             elif unit == 'percent_assets':
+                                # why abs(target_change) < 1?
                                 val = abs(asset_value)*abs(target_change) if abs(target_change) < 1 and abs(asset_value)*abs(target_change) < abs(current_amount)*price else abs(current_amount)*price
                                 order_value(ticker_symbol, val)
                                 asset_value += val
                             elif unit == 'percent_ownership':
-                                val = abs(current_amount)*abs(target_change) if abs(current_amount)*abs(target_change) < abs(current_amount) else abs(current_amount)
+                                val = abs(current_amount)*abs(target_change) if abs(target_change) < 1 else abs(current_amount)
                                 order(ticker_symbol, val)
                                 asset_value += val
 

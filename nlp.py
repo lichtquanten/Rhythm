@@ -74,7 +74,3 @@ def analyzeString(message, condition):
         con.createCondition(tic, amount, verb, time, type)
     else:
         ac.createAction(tic, amount, verb)
-
-splitString("If TSLA drops $5 from purchase price, then I want to sell 20 shares of MSFT")
-ac.print()
-con.print()

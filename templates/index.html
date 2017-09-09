@@ -13,9 +13,20 @@
   <body>
 
     <div class="container">
-        <div id="heading" style = "text-align: center;">
-            <h1 style="font-family:Raleway;">SpeedTrader</h1>
-            <h3 style="font-family: Montserrat;">Fastr. Bettr. Tradr.</h3>
+        <div style = "text-align: center;">
+            <h1>SpeedTrader</h1>
+            <h3 style="">Fastr. Bettr. Tradr.</h3>
+            <p> {{ algorithm }}</p>
+            <p> {{ action }}</p>
+            <p> {{ condition }}</p>
+        </div>
+        <div id="entry">
+            <div class="form-group">
+                <form action="." method="POST">
+                    <input type="text" name="text" class="form-control" id="usr" placeholder="If MSFT drops $10 from yesterday's close, buy 10 shares of MSFT">
+                    <button> Go </button>
+                </form>
+            </div>
         </div>
     </div>
 

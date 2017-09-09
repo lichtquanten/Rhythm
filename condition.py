@@ -27,3 +27,11 @@ class Condition:
         else:
             cond = "Negative"
         print("CONDITION: " + self.ticker.upper() + " " + self.change + " by " + self.percentage + " from " + self.time + ". This is a " + cond + " change")
+
+    def toString(self):
+        cond = ""
+        if type == True:
+            cond = "Positive"
+        else:
+            cond = "Negative"
+        return "CONDITION: " + self.ticker.upper() + " " + self.change + " by " + self.percentage + " from " + self.time + ". This is a " + cond + " change"

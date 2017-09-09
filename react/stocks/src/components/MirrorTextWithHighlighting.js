@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {Row, Input, Button, Col, CardPanel} from 'react-materialize';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/styles';
+
 
 export default class MirrorTextWithHighlighting extends Component {
     constructor(props) {
@@ -11,7 +13,7 @@ export default class MirrorTextWithHighlighting extends Component {
 
     render() {
         return (
-            <h2>{this.state.currentText || this.props.showText}</h2>
+            <SyntaxHighlighter language="javascript" style={docco}>{this.state.currentText || this.props.showText}</SyntaxHighlighter>
         )
     }
 }

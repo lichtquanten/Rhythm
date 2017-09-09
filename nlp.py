@@ -34,7 +34,7 @@ def analyzeString(message, condition):
     positive = False
 
     user_input = message
-    letters = re.sub("[^a-zA-Z0-9%]", " ", user_input)
+    letters = re.sub("[^a-zA-Z0-9%$]", " ", user_input)
     lower_letters = letters.lower()
 
     allwords = [stem(w) for w in lower_letters.split() if not w in stopwords.words("english")]
@@ -44,16 +44,18 @@ def analyzeString(message, condition):
 
     finalTerms = []
     for i in pos:
-        if i[0] in stockTriggers+stockTickers or i[1] == 'CD' or i[0] == '%':
+        if i[0] in stockTriggers+stockTickers or i[1] == 'CD' or i[0] == '%' or i[0] == "$":
             finalTerms.append(i)
     for i in finalTerms:
         print(i)
         if i[0] in stockTickers:
             tic = i[0]
         elif i[1] == 'CD':
-            amount = i[0]
+            amount += i[0]
         elif i[0] == '%':
             amount += "%"
+        elif i[0] == '$':
+            amount += "$"
         elif i[0] in stockDecisionsPositive:
             verb = i[0]
             type = True
@@ -72,6 +74,6 @@ def analyzeString(message, condition):
     else:
         ac.createAction(tic, amount, verb)
 
-splitString("If TSLA drops 5% from purchase price, then I want to buy 20 shares of MSFT")
+splitString("If TSLA drops $5 from purchase price, then I want to buy 20 shares of MSFT")
 ac.print()
 con.print()

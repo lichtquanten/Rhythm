@@ -11,6 +11,7 @@ stockTimes = ['yesterday', 'purchas', 'bought']
 stockDecisionsPositive = ['gain', 'rise', 'up', 'win']
 stockDecisionsNegative = ['fall', 'drop', 'lose', 'down']
 stockActions = ["buy", "sell", "short"]
+stockSymbols = ["$", "%"]
 stockTriggers = stockTimes + stockDecisionsPositive + stockDecisionsNegative + stockActions
 
 
@@ -44,7 +45,7 @@ def analyzeString(message, condition):
 
     finalTerms = []
     for i in pos:
-        if i[0] in stockTriggers+stockTickers or i[1] == 'CD' or i[0] == '%' or i[0] == "$":
+        if i[0] in stockTriggers+stockTickers+stockSymbols or i[1] == 'CD':
             finalTerms.append(i)
     for i in finalTerms:
         print(i)
@@ -74,6 +75,6 @@ def analyzeString(message, condition):
     else:
         ac.createAction(tic, amount, verb)
 
-splitString("If TSLA drops $5 from purchase price, then I want to buy 20 shares of MSFT")
+splitString("If TSLA drops $5 from purchase price, then I want to sell 20 shares of MSFT")
 ac.print()
 con.print()

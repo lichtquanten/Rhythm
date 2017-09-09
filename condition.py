@@ -4,7 +4,7 @@ class Condition:
     change = ""
     time = ""
     type = ""
-
+    is_percentage = ""
     def __init__(self):
         pass
 
@@ -14,6 +14,11 @@ class Condition:
         self.change = change
         self.time = time
         self.type = type
+
+        if percentage[-1:] == "%":
+            is_percentage = True
+        else:
+            is_percentage = False
 
     def print(self):
         cond = ""

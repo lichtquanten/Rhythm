@@ -6,7 +6,11 @@ class Action:
         pass
     def createAction(self, ticker, amount, verb):
         self.ticker = ticker
-        self.amount = amount
+
+        if verb != "buy":
+            self.amount = -1 * int(amount)
+        else:
+            self.amount = int(amount)
         self.verb = verb
     def print(self):
-        print("ACTION: " + self.verb + " " + self.amount + " stocks of " + self.ticker.upper())
+        print("ACTION: " + self.verb + " " + str(self.amount) + " stocks of " + self.ticker.upper())

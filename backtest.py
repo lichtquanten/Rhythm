@@ -181,8 +181,8 @@ if __name__ == "__main__":
                 'type': 'stocky',
                 'payload': {
                     'stocks': [
-                        { 'ticker': 'AMZN', 'field': 'price' },
-                        { 'ticker': 'AMZN', 'field': 'close_price' }
+                        { 'ticker': 'MSFT', 'field': 'close_price',  'threshold': -2, 'threshold_type': 'dollars'},
+                        { 'ticker': 'MSFT', 'field': 'open' }
                     ],
                     'threshold': 1.2,
                     'threshold_type': 'percent'

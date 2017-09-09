@@ -3,6 +3,8 @@
 import zipline
 from zipline.api import order, order_value, order_percent, record, symbol
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def backtest(algo_config):
@@ -154,8 +156,6 @@ def initialize(context):
 
 
 def analyze(context=None, results=None):
-    import matplotlib.pyplot as plt
-    index = 211
     for key in list(results):
         if key == 'algo_volatility':
             break
@@ -165,17 +165,28 @@ def analyze(context=None, results=None):
         plt.xlabel('Time')
         plt.ylabel('Price of ' + key)
 
-    plt.figure()
-    plt.suptitle('Portfolio Value')
-    plt.plot(results.portfolio_value)
-    plt.xlabel('Time')
-    plt.ylabel('Portfolio Value')
+    transactionPoints = results.loc[results['capital_used'] != 0]
 
     plt.figure()
-    plt.suptitle('Returns')
-    plt.plot(results.returns)
+    plt.suptitle('Portfolio Value vs Time')
+    plt.plot(results.portfolio_value)
+    plt.plot_date(transactionPoints.portfolio_value)
     plt.xlabel('Time')
-    plt.ylabel('Returns')
+    plt.ylabel('Portfolio Value')
+    plt.show()
+
+    plt.figure()
+    plt.suptitle('Stock Value vs Time')
+    plt.plot(results.ending_value)
+    plt.xlabel('Time')
+    plt.ylabel('Stock Value')
+    plt.show()
+
+    plt.figure()
+    plt.suptitle('Transactions vs Time')
+    plt.plot(transactionPoints.portfolio_value)
+    plt.xlabel('Time')
+    plt.ylabel('Transaction Costs')
 
     # Show the plot.
     plt.gcf().set_size_inches(18, 8)

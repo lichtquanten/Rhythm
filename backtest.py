@@ -15,20 +15,26 @@ def backtest(algo_config):
             should_act = False
 
             # CONDITION COMMAND CENTER
-            conditionals = algo['condition']['conditionals']
-            if algo['condition']['type'] == 'stocky':
+            logic = algo['condition']['logic']
+            for i in range(0, len(logic), 2):
+                conditional_truth = test_conditional(logic[i], data)
+                if len(logic) - 1 > i:
+                    if logic[i + 1] == 'or':
+                        if conditional_truth:
+                            should_act = True
+                            break
+                        else:
+                            continue
+                    elif logic[i + 1] == 'and':
+                        if conditional_truth:
+                            continue
+                        else:
+                            should_act = False
+                            break
+                else:
+                    should_act = False
+                    break
 
-                for conditional in conditionals:
-                    current_price = data.current(symbol(conditional['ticker']), 'price')
-                    record(conditional['ticker'], current_price)
-                    comparison_price = ""
-                    if conditional['field'] == 'close_price':
-                        comparison_price = data.history(symbol(conditional['ticker']), 'close', 2, '1d')[0]
-                    elif conditional['field'] == 'open':
-                        comparison_price = data.current(symbol(conditional['ticker']), 'open')
-
-            diff = (current_price - comparison_price)/(comparison_price * 100 if conditional['threshold_type'] == 'percent' else 1)
-            should_act = (conditional['threshold'] > 0 and diff > 0 or conditional['threshold'] < 0 and diff < 0) and (abs(diff) > abs(conditional['threshold'])))
 
 
                 # ACTION COMMAND CENTER
@@ -128,8 +134,7 @@ def backtest(algo_config):
                                 order(ticker_symbol, val)
                                 asset_value += val
 
-    zipline.run_algorithm(pd.Timestamp('2014-01-01', tz='utc'), pd.Timestamp('2014-11-01', tz='utc'), initialize,
-                          100000, handle_data, analyze=analyze)
+    zipline.run_algorithm(pd.Timestamp('2014-01-01', tz='utc'), pd.Timestamp('2014-11-01', tz='utc'), initialize, 100000, handle_data, analyze=analyze)
 
 
 # used to define context
@@ -166,6 +171,16 @@ def analyze(context=None, results=None):
     plt.gcf().set_size_inches(18, 8)
     plt.show()
 
+def test_conditional(conditional, data):
+    current_price = data.current(symbol(conditional['ticker']), 'price')
+    record(conditional['ticker'], current_price)
+    comparison_price = ""
+    if conditional['field'] == 'close_price':
+        comparison_price = data.history(symbol(conditional['ticker']), 'close', 2, '1d')[0]
+    elif conditional['field'] == 'open':
+        comparison_price = data.current(symbol(conditional['ticker']), 'open')
+    diff = (current_price - comparison_price)/(comparison_price * 100 if conditional['threshold_type'] == 'percent' else 1)
+    return (conditional['threshold'] > 0 and diff > 0 or conditional['threshold'] < 0 and diff < 0) and (abs(diff) > abs(conditional['threshold']))
 
 if __name__ == "__main__":
     demo_algo_config = [
@@ -178,8 +193,10 @@ if __name__ == "__main__":
             },
             'condition': {
                 'type': 'stocky',
-                'conditionals': [
-                    {'ticker': 'AMZN', 'field': 'close_price', 'threshold': 3, 'threshold_type': 'percentage'},
+                'logic': [
+                    {'ticker': 'AMZN', 'field': 'close_price', 'threshold': 0.02, 'threshold_type': 'percentage'},
+                    'or',
+                    {'ticker': 'AMZN', 'field': 'open', 'threshold': 500, 'threshold_type': 'dollars'}
                 ]
             }
         }

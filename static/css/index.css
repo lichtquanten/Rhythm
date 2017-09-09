@@ -1,0 +1,22 @@
+body {
+      background: #004e92; /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(right, #000428 , #004e92); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, #000428 , #004e92); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, #000428 , #004e92); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, #000428 , #004e92); /* Standard syntax */
+    color: white;
+
+}
+
+.heading h1{
+    text-align: center;
+    font-size: 50px;
+    font-family: "Raleway", "Avenir Next";
+}
+
+.heading h3 {
+    text-align: center;
+    font-size: 35px;
+    font-family: "Montserrat", "Avenir Next";
+}
+

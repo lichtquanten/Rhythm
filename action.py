@@ -20,3 +20,6 @@ class Action:
 
     def toString(self):
         return "ACTION: " + self.verb + " " + str(self.amount) + " stocks of " + self.ticker.upper()
+
+    def toJSON(self):
+        return {"ticker":self.ticker, "amount":self.amount, "action":self.verb}

@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+zipline\ practice/
+
+.idea/
+
+zipline.py

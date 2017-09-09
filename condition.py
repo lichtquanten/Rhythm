@@ -22,9 +22,9 @@ class Condition:
         else:
             self.amount = -1 * int(amount)
         if time == "yesterday" or time == "close":
-            self.time = "price"
-        else:
             self.time = "close_price"
+        elif time == "open":
+            self.time = "open"
         self.conditions.append({"ticker": self.ticker.upper(), "field":self.time, 'threshold': self.amount, 'threshold_type':self.amount_type})
 
     def print(self):
@@ -41,8 +41,8 @@ class Condition:
         'type': 'stocky',
         'payload': {
             'stocks': [
-                {'ticker': 'MSFT', 'field': 'price'},
-                {'ticker': 'MSFT', 'field': 'close_price'}
+                {'ticker': 'MSFT', 'field': 'price', 'threshold': -10,'threshold_type': 'percent'},
+                {'ticker': 'AMZN', 'field': 'close_price'}
             ],
             'threshold': -10,
             'threshold_type': 'percent'

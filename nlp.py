@@ -9,7 +9,7 @@ import json
 import tweepy
 
 stockTickers = [x.lower() for x in list(stocksdata.stocks.keys())]
-stockTimes = ['yesterday', 'close', 'purchas', 'bought']
+stockTimes = ['yesterday', 'close', 'purchas', 'bought', 'open']
 stockDecisionsPositive = ['gain', 'rise', 'up', 'win']
 stockDecisionsNegative = ['fall', 'drop', 'lose', 'down']
 stockActions = ["buy", "sell", "short"]
@@ -29,7 +29,7 @@ def splitString(message):
         analyzeString(strings[1], "action")
 
     print(json.dumps({**con.toJSON(), **ac.toJSON()}))
-    return {**con.toJSON(), **ac.toJSON()}
+    return [{**con.toJSON(), **ac.toJSON()}]
 
 
 def analyzeString(message, condition):

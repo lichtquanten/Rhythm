@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="74e994bf-9f85-4129-ae0d-95c32930487e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/backtest.py" afterPath="$PROJECT_DIR$/backtest.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/condition.py" afterPath="$PROJECT_DIR$/condition.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/nlp.py" afterPath="$PROJECT_DIR$/nlp.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,8 +16,8 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/PennApps_XVI$nlp.coverage" NAME="nlp Coverage Results" MODIFIED="1504988295786" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PennApps_XVI$twitter.coverage" NAME="twitter Coverage Results" MODIFIED="1504981821248" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PennApps_XVI$backtest.coverage" NAME="backtest Coverage Results" MODIFIED="1504988435366" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/PennApps_XVI$condition.coverage" NAME="condition Coverage Results" MODIFIED="1504986310850" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PennApps_XVI$backtest.coverage" NAME="backtest Coverage Results" MODIFIED="1504992998154" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/PennApps_XVI$condition.coverage" NAME="condition Coverage Results" MODIFIED="1504990234430" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PennApps_XVI$Python_Console.coverage" NAME="Python Console Coverage Results" MODIFIED="1504980077477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/PennApps_XVI$action.coverage" NAME="action Coverage Results" MODIFIED="1504938562964" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PennApps_XVI$app.coverage" NAME="app Coverage Results" MODIFIED="1504968802140" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -26,8 +27,8 @@
       <file leaf-file-name="nlp.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nlp.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="57" column="9" lean-forward="false" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
+            <state relative-caret-position="326">
+              <caret line="31" column="11" lean-forward="false" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="44" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -38,8 +39,8 @@
       <file leaf-file-name="backtest.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/backtest.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3060">
-              <caret line="206" column="13" lean-forward="true" selection-start-line="206" selection-start-column="13" selection-end-line="206" selection-end-column="13" />
+            <state relative-caret-position="242">
+              <caret line="44" column="30" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
               <folding>
                 <element signature="e#23#37#0" expanded="true" />
               </folding>
@@ -50,8 +51,8 @@
       <file leaf-file-name="condition.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/condition.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="39">
-              <caret line="12" column="12" lean-forward="false" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+            <state relative-caret-position="67">
+              <caret line="7" column="20" lean-forward="true" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -61,7 +62,7 @@
         <entry file="file://$PROJECT_DIR$/app.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="150">
-              <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
               <folding>
                 <element signature="e#0#71#0" expanded="true" />
               </folding>
@@ -126,6 +127,7 @@
     <findStrings>
       <find>ANY</find>
       <find>gain</find>
+      <find>backtest</find>
       <find>change</find>
     </findStrings>
   </component>
@@ -142,8 +144,8 @@
         <option value="$PROJECT_DIR$/stocksdata.py" />
         <option value="$PROJECT_DIR$/twitter.py" />
         <option value="$PROJECT_DIR$/action.py" />
-        <option value="$PROJECT_DIR$/condition.py" />
         <option value="$PROJECT_DIR$/nlp.py" />
+        <option value="$PROJECT_DIR$/condition.py" />
         <option value="$PROJECT_DIR$/backtest.py" />
       </list>
     </option>
@@ -335,8 +337,8 @@
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.backtest" />
-        <item index="1" class="java.lang.String" itemvalue="Python.nlp" />
-        <item index="2" class="java.lang.String" itemvalue="Python.condition" />
+        <item index="1" class="java.lang.String" itemvalue="Python.condition" />
+        <item index="2" class="java.lang.String" itemvalue="Python.nlp" />
         <item index="3" class="java.lang.String" itemvalue="Python.twitter" />
         <item index="4" class="java.lang.String" itemvalue="Python.Python Console" />
       </list>
@@ -412,7 +414,14 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/condition.py</url>
+          <line>1</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+      <option name="time" value="2" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -539,16 +548,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#71#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/action.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
@@ -565,14 +564,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/condition.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="39">
-          <caret line="12" column="12" lean-forward="false" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python3.6/site-packages/zipline/algorithm.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="150">
@@ -581,20 +572,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#71#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/nlp.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="57" column="9" lean-forward="false" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
+        <state relative-caret-position="326">
+          <caret line="31" column="11" lean-forward="false" selection-start-line="31" selection-start-column="11" selection-end-line="31" selection-end-column="44" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/condition.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="67">
+          <caret line="7" column="20" lean-forward="true" selection-start-line="7" selection-start-column="20" selection-end-line="7" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/backtest.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3060">
-          <caret line="206" column="13" lean-forward="true" selection-start-line="206" selection-start-column="13" selection-end-line="206" selection-end-column="13" />
+        <state relative-caret-position="242">
+          <caret line="44" column="30" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="203" selection-end-column="0" />
           <folding>
             <element signature="e#23#37#0" expanded="true" />
           </folding>

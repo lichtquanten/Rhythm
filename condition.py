@@ -7,6 +7,8 @@ class Condition:
     amount_type = ""
     is_percentage = ""
 
+    conditions = []
+
     def __init__(self):
         pass
 
@@ -23,6 +25,7 @@ class Condition:
             self.time = "price"
         else:
             self.time = "close_price"
+        self.conditions.append({"ticker": self.ticker.upper(), "field":self.time, 'threshold': self.amount, 'threshold_type':self.amount_type})
 
     def print(self):
         print("CONDITION: " + self.ticker.upper() + " " + self.verb + " by " + self.amount + " from " + self.time + ". This is a " + self.cond + " change")
@@ -31,7 +34,8 @@ class Condition:
         return "CONDITION: " + self.ticker.upper() + " " + self.verb + " by " + self.amount + " from " + self.time + ". This is a " + self.cond + " change"
 
     def toJSON(self):
-        return {"condition":{'type': 'stocky', 'payload':{'stocks':[{"ticker": self.ticker.upper(), "field":self.time}], 'threshold': self.amount, 'threshold_type':self.amount_type}}}
+
+        return {"condition":{'type': 'stocky', 'payload':{'stocks':self.conditions}}}
 """ 
 'condition': {
         'type': 'stocky',

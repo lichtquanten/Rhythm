@@ -23,7 +23,9 @@ def splitString(message):
     message = message.lower()
     if message.index("if") == 0:
         strings = message.split(",")
-        analyzeString(strings[0], "decision")
+        conditions = strings[0].split("and")
+        for i in conditions:
+            analyzeString(i, "condition")
         analyzeString(strings[1], "action")
 
     return json.dumps({**ac.toJSON(), **con.toJSON()})
@@ -36,19 +38,12 @@ def analyzeString(message, condition):
     verb = ""
     amount_type = "shares"
     time = ""
-    twitter_person = ""
-    is_twitter = False
 
     user_input = message
     letters = re.sub("[^a-zA-Z0-9%$@]", " ", user_input)
     lower_letters = letters.lower()
 
     allwords = [stem(w) for w in lower_letters.split() if not w in stopwords.words("english")]
-    print(allwords)
-    for i in allwords:
-        if i[:1] == "@":
-            twitter_person = i
-            is_twitter = True
     string = " ".join(str(x) for x in allwords)
     text = nltk.word_tokenize(string)
     pos = nltk.pos_tag(text)
@@ -58,7 +53,7 @@ def analyzeString(message, condition):
             finalTerms.append(i)
     print(finalTerms)
     for i in finalTerms:
-        if i[0] in stockTickers:
+        if i[0] in stockTickers and i[1] != "VB":
             tic = i[0]
         elif i[1] == 'CD':
             amount += i[0]
@@ -79,10 +74,10 @@ def analyzeString(message, condition):
                 time = "purchase"
             else:
                 time = i[0]
-    if condition == "decision":
+    if condition == "condition":
 
         con.createCondition(tic, amount, amount_type, verb, time, type)
     else:
         ac.createAction(tic, amount, amount_type, verb)
 
-print(splitString("If MSFT falls by $5 from yesterday, buy 10 shares of AAPL"))
+print(splitString("If MSFT falls by $34 from yesterday AND TSLA gains 3% from purchase, buy 10 shares of AAPL"))

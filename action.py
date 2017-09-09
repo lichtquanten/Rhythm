@@ -11,9 +11,10 @@ class Action:
 
         if verb != "buy":
             self.amount = -1 * int(amount)
+            self.verb = "negative"
         else:
             self.amount = int(amount)
-        self.verb = verb
+            self.verb = "positive"
 
     def print(self):
         print("ACTION: " + self.verb + " " + str(self.amount) + " stocks of " + self.ticker.upper())
@@ -22,4 +23,4 @@ class Action:
         return "ACTION: " + self.verb + " " + str(self.amount) + " stocks of " + self.ticker.upper()
 
     def toJSON(self):
-        return {"ticker":self.ticker, "amount":self.amount, "action":self.verb}
+        return {"action":{"ticker":self.ticker.upper(), "amount":str(self.amount), "action":self.verb}}

@@ -5,6 +5,7 @@ from stemming.porter2 import stem
 from action import Action
 from condition import Condition
 import stocksdata
+import json
 
 stockTickers = [x.lower() for x in list(stocksdata.stocks.keys())]
 stockTimes = ['yesterday', 'purchas', 'bought']
@@ -26,6 +27,7 @@ def splitString(message):
         analyzeString(strings[0], "decision")
         analyzeString(strings[1], "action")
 
+    return json.dumps({**ac.toJSON(), **con.toJSON()})
 def analyzeString(message, condition):
 
     tic = ""

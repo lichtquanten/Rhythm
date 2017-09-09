@@ -15,5 +15,10 @@ def postData():
     nlp.splitString(text)
     return render_template('index.html', algorithm=text, action=nlp.ac.toString(), condition=nlp.con.toString())
 
+@app.route('/api', methods=['GET'])
+def getNLP():
+    message = request.args['text']
+    return nlp.splitString(message)
+
 if __name__ == '__main__':
     app.run()

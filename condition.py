@@ -1,37 +1,34 @@
 class Condition:
     ticker = ""
-    percentage = ""
-    change = ""
+    amount = ""
+    verb = ""
     time = ""
-    type = ""
+    cond = ""
     is_percentage = ""
     def __init__(self):
         pass
 
-    def createCondition(self, ticker, percentage, change, time, type):
+    def createCondition(self, ticker, amount, verb, time, type):
         self.ticker = ticker
-        self.percentage = percentage
-        self.change = change
+        self.amount = amount
+        self.verb = verb
         self.time = time
+        if type == True:
+            self.cond = "positive"
+        else:
+            self.cond = "negative"
         self.type = type
 
-        if percentage[-1:] == "%":
-            is_percentage = True
+        if amount[-1:] == "%":
+            self.is_percentage = True
         else:
-            is_percentage = False
+            self.is_percentage = False
 
     def print(self):
-        cond = ""
-        if type == True:
-            cond = "Positive"
-        else:
-            cond = "Negative"
-        print("CONDITION: " + self.ticker.upper() + " " + self.change + " by " + self.percentage + " from " + self.time + ". This is a " + cond + " change")
+        print("CONDITION: " + self.ticker.upper() + " " + self.verb + " by " + self.amount + " from " + self.time + ". This is a " + self.cond + " change")
 
     def toString(self):
-        cond = ""
-        if type == True:
-            cond = "Positive"
-        else:
-            cond = "Negative"
-        return "CONDITION: " + self.ticker.upper() + " " + self.change + " by " + self.percentage + " from " + self.time + ". This is a " + cond + " change"
+        return "CONDITION: " + self.ticker.upper() + " " + self.verb + " by " + self.amount + " from " + self.time + ". This is a " + self.cond + " change"
+
+    def toJSON(self):
+        return {"condition":{"ticker": self.ticker.upper(), "amount": self.amount, "verb": self.cond, "time":self.time, "is_percentage": self.is_percentage}}

@@ -1,8 +1,10 @@
 from flask import Flask, render_template, url_for, current_app, request
 import os
 import nlp
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
+CORS(app)
 app.static_folder = 'static'
 
 @app.route('/')

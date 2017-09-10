@@ -140,9 +140,6 @@ def analyze(context=None, results=None):
 
 
 def test_conditional(conditional, context, data):
-    meme = 'sma14'
-    print("YO" + str(sum(data.history(symbol(conditional['ticker']), 'close', int(meme[3:]), '1d')/int(meme[3:]))))
-
     current_price = data.current(symbol(conditional['ticker']), 'price')
     record(conditional['ticker'], current_price)
     if conditional['field'] == 'close_price':

@@ -22,6 +22,7 @@ def backtests(algo_config, start, end):
             asset_value += context.portfolio.positions[key].amount * data.current(key, 'price');
 
         for algo in algo_config:
+            print("ALGO: " + str(algo))
             should_act = False
 
             # CONDITION COMMAND CENTER
@@ -159,24 +160,24 @@ def test_conditional(conditional, context, data):
     return (conditional['threshold'] > 0 and diff > 0 or conditional['threshold'] < 0 and diff < 0) and (
         abs(diff) > abs(conditional['threshold']))
 #acktests(nlp.splitString("If AMZN rises by 0.02% from close or if AMZN rises $500 from open, then buy 2 shares of AMZN"))
-if __name__ == "__main__":
-    demo_algo_config = [
-        {
-            'action': {
-                'ticker': 'AMZN',
-                'amount': 2,
-                'amount_unit': 'shares',
-                'position': 'long'
-            },
-            'condition': {
-                'type': 'stocky',
-                'logic': [
-                    {'ticker': 'AMZN', 'field': 'close_price', 'threshold': 0.02, 'threshold_type': 'percentage'},
-                    'or',
-                    {'ticker': 'AMZN', 'field': 'open', 'threshold': 500, 'threshold_type': 'dollars'}
-                ]
-            }
-        }]
-
-
-    print(backtests(nlp.splitString("If AMZN rises $1 from 30 day moving average, then buy 2 shares of AMZN."), '2011-01-11', '2011-04-11'))
+# if __name__ == "__main__":
+#     demo_algo_config = [
+#         {
+#             'action': {
+#                 'ticker': 'AMZN',
+#                 'amount': 2,
+#                 'amount_unit': 'shares',
+#                 'position': 'long'
+#             },
+#             'condition': {
+#                 'type': 'stocky',
+#                 'logic': [
+#                     {'ticker': 'AMZN', 'field': 'close_price', 'threshold': 0.02, 'threshold_type': 'percentage'},
+#                     'or',
+#                     {'ticker': 'AMZN', 'field': 'open', 'threshold': 500, 'threshold_type': 'dollars'}
+#                 ]
+#             }
+#         }]
+#
+#
+#     print(backtests(nlp.splitString("If AMZN rises $1 from 30 day moving average, then buy 2 shares of AMZN."), '2011-01-11', '2011-04-11'))

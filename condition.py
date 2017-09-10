@@ -10,6 +10,7 @@ class Condition:
     conditions = []
 
     def __init__(self):
+        self.conditions = []
         pass
 
     def createCondition(self, ticker, amount, amount_type, verb, time, type, conjunction):
@@ -41,6 +42,7 @@ class Condition:
     def toJSON(self):
         # print(self.conditions)
         return {"condition":{'type': 'stocky', 'logic':self.conditions}}
+
 """
 'condition': {
         'type': 'stocky',

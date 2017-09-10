@@ -13,7 +13,7 @@ def generate_algorithm(algos):
     lines= f.readlines()
     lines.insert(13, lines[-1])
     lines = lines[:-1]
-    thefile = open('algorithm.py', 'w')
+    thefile = open('react/stocks/public/algorithm.py', 'w')
     for line in lines:
         thefile.write("%s" % line)
 

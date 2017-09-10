@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import './App.css';
 import {Row, Input, Button} from 'react-materialize';
 import MirrorTextWithHighlighting from './components/MirrorTextWithHighlighting';
+import SyntaxHighlighter from 'react-syntax-highlighter';
 import dateFormat from 'dateformat';
 import request from 'superagent';
 
@@ -41,6 +42,11 @@ class App extends Component {
         </div>
         <Button waves="light" onClick={this.updateCode.bind(this)}>Translate to Code</Button>
         <MirrorTextWithHighlighting showText = {this.state.currentText}/>
+        <Row>
+          <img src="portfolio_value.png"/>
+        </Row>
+       
+          <Button> <a href="algorithm.py" download> Download algorithm! </a></Button>
         </div>
       </div>
     );
@@ -54,7 +60,10 @@ class App extends Component {
     this.setState({toDate: v});
   }
 
-  updateCode() {
+  updateCode(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
     const fromDate = this.state.fromDate;
     const toDate = this.state.toDate;
     const fixedFromDate = dateFormat(fromDate, "yyyy/mm/dd").split("/").join("-");
@@ -62,58 +71,16 @@ class App extends Component {
     console.log("Updating code: " + JSON.stringify(this.state) + " and " + fixedFromDate);
     const objFit = {currentText: this.state.currentText, fromDate: fixedFromDate, fixedToDate: fixedToDate}; // yyyy/mm/dd
     console.log('thing to send: ' + JSON.stringify(objFit));
-    // SEND REQUEST HERE!
+    fetch("http://a306cf12.ngrok.io/api/text", {
+      method: 'POST',
+      body: 'text=' + this.state.currentText + '&start=' + fixedFromDate + '&end=' + fixedToDate,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }).then((response) => {
+      console.log(JSON.stringify(response));
+    })
   }
-
-  // updateCode() {
-  //   console.log("Code has been updated.");
-  //   // Where the network request will go.
-  //   request.get('http://127.0.0.1:5000/api?text=' + this.state.currentText) // if MSFT drops 20% from yesterday, buy 10 shares of AAPL.
-  //          .end((err, res) => {
-  //            try {
-  //              console.log('yeh: ');
-  //            if (err) console.log(err);
-  //            console.log('response recieved: ' + JSON.stringify(res));
-  //            const base = JSON.parse(res.text);
-  //            const action = base.action;
-  //            const condition = base.condition;
-  //           //  console.log("action: " + JSON.stringify(condition));
-  //           // Add ticker from ACTION
-  //           this.state.actionsAndConditions.push({type: 'ticker', value: action.ticker});
-  //           // Add amount from ACTION
-  //           this.state.actionsAndConditions.push({type: 'amount', value: action.amount});
-  //           // Add amount_unit from ACTION
-  //           this.state.actionsAndConditions.push({type: 'amount_unit', value: action.amount_unit});
-  //           // Add position from ACTION
-  //           this.state.actionsAndConditions.push({type: 'position', value: action.position});
-
-  //           // // Add action from ACTION
-  //           // this.state.actionsAndConditions.push({type: 'action', value: action.action});
-
-  //           // Add type from CONDITION
-  //           this.state.actionsAndConditions.push({type: 'type', value: condition.type})
-  //           // Add ticker from CONDITION
-  //           this.state.actionsAndConditions.push({type: 'ticker', value: condition.payload.stocks[0].ticker});
-  //           // Add price from CONDITION
-  //           this.state.actionsAndConditions.push({type: 'price', value: condition.payload.stocks[1].field})
-  //           // Add threshold for CONDITION
-  //           this.state.actionsAndConditions.push({type: 'threshold', value: condition.threshold});
-  //           // Add threshold_type for CONDITION
-  //           this.state.actionsAndConditions.push({type: 'threshold_type', value: condition.threshold_type})
-
-  //           // // Add amount from CONDITION
-  //           // this.state.actionsAndConditions.push({type: 'amount', value: condition.amount});
-  //           // // Add verb from CONDITION
-  //           // this.state.actionsAndConditions.push({type: 'verb', value: condition.verb});
-  //           // // Add time from CONDITION
-  //           // this.state.actionsAndConditions.push({type: 'time', value: condition.time});
-  //           // // Add isPercentage from CONDITION
-  //           // this.state.actionsAndConditions.push({type: 'isPercentage', value: condition.isPercentage});
-
-  //           this.setState({currentText: this.highlightCurrentText()});
-  //            } catch (e) {}
-  //          })
-  // }
 
   updateAlgoText(obj, value) {
     this.setState({currentText: value});

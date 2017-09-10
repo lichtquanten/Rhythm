@@ -120,29 +120,32 @@ def analyze(context=None, results=None):
     transactionPoints = transactionPoints.reset_index()
 
     plt.figure()
+    plt.rcParams['axes.facecolor'] = 'black'
     plt.suptitle('Portfolio Value vs Time')
-    plt.plot(results.portfolio_value)
-    plt.plot_date(transactionPoints['index'], transactionPoints['portfolio_value'])
+    plt.plot(results.portfolio_value, color='#30cd9a')
+    plt.plot_date(transactionPoints['index'], transactionPoints['portfolio_value'], color='white')
     plt.xlabel('Time')
     plt.ylabel('Portfolio Value')
-    plt.savefig('portfolio_value.png')
+    plt.savefig('react/stocks/public/portfolio_value.png')
 
     plt.figure()
+    plt.rcParams['axes.facecolor'] = 'black'
     plt.suptitle('Stock Value vs Time')
-    plt.plot(results.ending_value)
+    plt.plot(results.ending_value, color='#30cd9a')
     plt.xlabel('Time')
     plt.ylabel('Stock Value')
-    plt.savefig('stock_value.png')
+    plt.savefig('react/stocks/public/stock_value.png')
 
     plt.figure()
+    plt.rcParams['axes.facecolor'] = 'black'
     plt.suptitle('Transactions vs Time')
-    plt.plot(transactionPoints.portfolio_value)
+    plt.plot(transactionPoints.portfolio_value, color='#30cd9a')
     plt.xlabel('Time')
     plt.ylabel('Transaction Costs')
 
     # Show the plot.
     plt.gcf().set_size_inches(18, 8)
-    plt.savefig('transactions.png')
+    plt.savefig('react/stocks/public/transactions.png')
 
 def test_conditional(conditional, context, data):
     current_price = data.current(symbol(conditional['ticker']), 'price')

@@ -4,7 +4,6 @@ import json
 import nlp
 from flask_cors import CORS, cross_origin
 from backtest import backtests
-import algo_generator
 
 app = Flask(__name__)
 CORS(app)
@@ -12,7 +11,7 @@ app.static_folder = 'static'
 
 @app.route('/', methods=['GET'])
 def home():
-
+    
     if request.args:
         message = request.args['message']
         start = request.args['start']
@@ -31,12 +30,14 @@ def postData():
 
 @app.route('/api/text', methods=['POST'])
 def handle_text():
-    if request.args:
-        message = request.args['text']
-        start = request.args['start']
-        end = request.args['end']
-        algo_config = nlp.splitString(message)
-        algo_generator.generate_algorithm(algo_config)
+    print(len(request.form))
+    print(len(request.values))
+    print(len(request.args))
+    if len(request.form) > 0:
+        print(request.form)
+        message = request.form['text']
+        start = request.form['start']
+        end = request.form['end']
         return json.dumps(backtests(nlp.splitString(message), start, end))
 
 @app.route('/api', methods=['GET'])

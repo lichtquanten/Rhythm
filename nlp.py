@@ -48,13 +48,13 @@ def splitString(message):
 def analyzeString(message, condition, conjunction):
 
     tic = ""
-    amount = ""
+    amount = None
     verb = ""
     amount_type = "shares"
     time = ""
     type = ""
     user_input = message
-    letters = re.sub("[^a-zA-Z0-9%$@]", " ", user_input)
+    letters = re.sub("[^a-zA-Z0-9%$@.]", " ", user_input)
     lower_letters = letters.lower()
 
     allwords = [stem(w) for w in lower_letters.split() if not w in stopwords.words("english")]
@@ -70,9 +70,10 @@ def analyzeString(message, condition, conjunction):
         if i[0] in stockTickers and i[1] != "VB":
             tic = i[0]
         elif i[1] == 'CD':
-            amount += i[0]
+            #print(i[0])
+            amount = float(i[0])
         elif i[0] == '%':
-            amount_type = "percent"
+            amount_type = "percentage"
         elif i[0] == '$':
             amount_type = "dollars"
         elif i[0] in stockDecisionsPositive:
@@ -89,9 +90,6 @@ def analyzeString(message, condition, conjunction):
             else:
                 time = i[0]
     if condition == "condition":
-
         con.createCondition(tic, amount, amount_type, verb, time, type, conjunction)
     else:
         ac.createAction(tic, amount, amount_type, verb)
-
-#print(splitString("If MSFT falls $3 from yesterday, buy 10 stocks of AAPL. If MSFT rises $5 from close, buy 5 stocks of AAPL."))

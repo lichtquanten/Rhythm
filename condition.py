@@ -17,10 +17,11 @@ class Condition:
 
         self.verb = verb
         self.amount_type = amount_type
+
         if type == True:
-            self.amount = int(amount)
+            self.amount = amount
         else:
-            self.amount = -1 * int(amount)
+            self.amount = -amount
         if time == "yesterday" or time == "close":
             self.time = "close_price"
         elif time == "open":

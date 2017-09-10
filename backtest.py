@@ -49,93 +49,41 @@ def backtest(algo_config):
                 current_amount = context.portfolio.positions[ticker_symbol].amount
                 price = data.current(ticker_symbol, 'price')
 
-                # long function
-                # clean up asset_value -= val
-                if algo['action']['position'] == 'long':
-                    if target_change > 0:  # long more
+                long = algo['action']['position'] == 'long'
+                if target_change > 0:
+                    if long:
                         if current_amount < 0:  # if currently shorting, get rid of short shares
                             order(ticker_symbol, abs(current_amount))
-                            asset_value += current_amount * price
-                        if unit == 'dollars':
-                            val = target_change if target_change < asset_value else asset_value
-                            order_value(ticker_symbol, val)
-                            asset_value -= val
-                        elif unit == 'shares':
-                            val = target_change if target_change * price < asset_value else asset_value / price
-                            order(ticker_symbol, val)
-                            asset_value -= val * price
-                        elif unit == 'percent_assets':
-                            val = target_change * asset_value if target_change < 1 else asset_value
-                            order_value(ticker_symbol, val)
-                            asset_value -= val
-                        elif unit == 'percent_ownership':
-                            val = current_amount * target_change * price if current_amount * target_change * price < asset_value else asset_value
-                            order_value(ticker_symbol, val)
-                            asset_value -= val
-                    elif target_change < 0:  # long less
-                        if not current_amount < 0:  # if currently shorting, longing less is meaningless
-                            if unit == 'dollars':
-                                val = target_change if abs(
-                                    target_change) < current_amount * price else -current_amount * price
-                                order_value(ticker_symbol, val)
-                                asset_value += val
-                            elif unit == 'shares':
-                                val = target_change if abs(target_change) < current_amount else -current_amount
-                                order(ticker_symbol, val)
-                                asset_value += val * price
-                            # not sure about this guy
-                            elif unit == 'percent_assets':
-                                val = target_change * asset_value if abs(target_change) < 1 and abs(
-                                    target_change) * asset_value < current_amount * price else -current_amount * price
-                                order_value(ticker_symbol, val)
-                                asset_value += val
-                            elif unit == 'percent_ownership':
-                                val = current_amount * target_change * price if abs(target_change) < 1 else -current_amount * price
-                                order_value(ticker_symbol, val)
-                                asset_value += val
-                # shorting
-                else:
-                    if target_change > 0:  # short more
+                            asset_value += abs(current_amount) * price
+                    else:
                         if current_amount > 0:  # if currently longing, sell long shares
                             order(-current_amount)
                             asset_value += current_amount * price
-                        if asset_value > 0:
-                            if unit == 'dollars':
-                                val = target_change if target_change < asset_value else asset_value
-                                order_value(ticker_symbol, -val)
-                                asset_value -= val
-                            elif unit == 'shares':
-                                val = target_change if target_change * price < asset_value else asset_value / price
-                                order(ticker_symbol, -val)
-                                asset_value -= val * price
-                            elif unit == 'percent_assets':
-                                val = target_change * asset_value if target_change < 1 else asset_value
-                                order_value(ticker_symbol, -val)
-                                asset_value -= val
-                            elif unit == 'percent_ownership':
-                                val = current_amount * target_change * price if current_amount * target_change * price < asset_value else asset_value
-                                order_value(ticker_symbol, -val)
-                                asset_value -= val
-                    elif target_change < 0: # short less
-                        # double check
-                        if current_amount < 0: # if currently longing, shorting less is meaningless
-                            if unit == 'dollars':
-                                val = abs(target_change) / price if abs(target_change) / price < abs(current_amount) else abs(current_amount)
-                                order(ticker_symbol, val)
-                                asset_value += val * price
-                            elif unit == 'shares':
-                                val = abs(target_change) if abs(target_change) < abs(current_amount) else abs(current_amount)
-                                order(ticker_symbol, val)
-                                asset_value += val * price
-                            elif unit == 'percent_assets':
-                                # why abs(target_change) < 1?
-                                val = abs(asset_value) * abs(target_change) if abs(target_change) < 1 and abs(asset_value) * abs(target_change) < abs(current_amount) * price else abs(current_amount) * price
-                                order_value(ticker_symbol, val)
-                                asset_value += val
-                            elif unit == 'percent_ownership':
-                                val = abs(current_amount) * abs(target_change) if abs(target_change) < 1 else abs(current_amount)
-                                order(ticker_symbol, val)
-                                asset_value += val
+                    if asset_value > 0:
+                        if unit == 'dollars':
+                            val = target_change / price if target_change < asset_value else asset_value / price
+                        elif unit == 'shares':
+                            val = target_change if target_change * price < asset_value else asset_value / price
+                        elif unit == 'percent_assets':
+                            val = target_change * asset_value / price if target_change < 1 else asset_value / price
+                        elif unit == 'percent_ownership':
+                            val = abs(current_amount) * target_change if abs(current_amount) * target_change * price < asset_value else asset_value / price
+                        order(ticker_symbol, val if long else -val)
+                        asset_value -= val * price
+                else:
+                    if (long and current_amount > 0) or (not long and current_amount < 0):
+                        if unit == 'dollars':
+                            val = target_change / price if abs(target_change) / price < abs(current_amount) else -abs(current_amount)
+                        elif unit == 'shares':
+                            val = target_change if abs(target_change) < abs(current_amount) else -abs(current_amount)
+                        elif unit == 'percent_assets':
+                            val = 0
+                            if asset_value > 0:
+                                val = target_change * asset_value / price if target_change > -1 and asset_value * abs(target_change) < abs(current_amount) * price else -abs(current_amount)
+                        elif unit == 'percent_ownership':
+                            val = abs(current_amount) * target_change if target_change > -1 else -abs(current_amount)
+                        order(ticker_symbol, val if long else -val)
+                        asset_value -= val * price
 
     zipline.run_algorithm(pd.Timestamp('2014-01-01', tz='utc'), pd.Timestamp('2014-11-01', tz='utc'), initialize, 100000, handle_data, analyze=analyze)
 

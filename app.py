@@ -3,13 +3,23 @@ import os
 import json
 import nlp
 from flask_cors import CORS, cross_origin
+from backtest import backtests
 
 app = Flask(__name__)
 CORS(app)
 app.static_folder = 'static'
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def hello():
+
+    if len(request.args):
+        message = request.args['message']
+        start = request.args['start']
+        end = request.args['end']
+
+        backtests(nlp.splitString(message), start, end)
+
+
     return render_template('index.html')
 
 @app.route('/', methods=['POST'])

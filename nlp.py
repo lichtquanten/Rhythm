@@ -8,7 +8,7 @@ import stocksdata
 import json
 
 stockTickers = [x.lower() for x in list(stocksdata.stocks.keys())]
-stockTimes = ['yesterday', 'close', 'purchas', 'bought', 'open']
+stockTimes = ['yesterday', 'close', 'purchas', 'bought', 'open', 'move']
 stockDecisionsPositive = ['gain', 'rise', 'up', 'win']
 stockDecisionsNegative = ['fall', 'drop', 'lose', 'down']
 stockActions = ["buy", "sell", "short"]
@@ -48,13 +48,13 @@ def splitString(message):
 def analyzeString(message, condition, conjunction):
 
     tic = ""
-    amount = None
+    amount = ""
     verb = ""
     amount_type = "shares"
     time = ""
     type = ""
     user_input = message
-    letters = re.sub("[^a-zA-Z0-9%$@.]", " ", user_input)
+    letters = re.sub("[^a-zA-Z0-9%$@]", " ", user_input)
     lower_letters = letters.lower()
 
     allwords = [stem(w) for w in lower_letters.split() if not w in stopwords.words("english")]
@@ -70,10 +70,9 @@ def analyzeString(message, condition, conjunction):
         if i[0] in stockTickers and i[1] != "VB":
             tic = i[0]
         elif i[1] == 'CD':
-            #print(i[0])
-            amount = float(i[0])
+            amount += i[0]
         elif i[0] == '%':
-            amount_type = "percentage"
+            amount_type = "percent"
         elif i[0] == '$':
             amount_type = "dollars"
         elif i[0] in stockDecisionsPositive:
@@ -87,9 +86,14 @@ def analyzeString(message, condition, conjunction):
         elif i[0] in stockTimes:
             if i[0] == "purchas":
                 time = "purchase"
+            elif i[0] == "move":
+                time = "sma"
             else:
                 time = i[0]
     if condition == "condition":
+
         con.createCondition(tic, amount, amount_type, verb, time, type, conjunction)
     else:
         ac.createAction(tic, amount, amount_type, verb)
+
+#print(splitString("If MSFT falls $3 from yesterday, buy 10 stocks of AAPL. If MSFT rises $5 from close, buy 5 stocks of AAPL."))

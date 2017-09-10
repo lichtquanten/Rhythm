@@ -11,7 +11,8 @@ class App extends Component {
     super();
     this.state = {
       currentText: "Awaiting text...",
-      actionsAndConditions: [] // array of Strings
+      fromDate: "",
+      toDate: ""
     }
   }
 
@@ -34,12 +35,8 @@ class App extends Component {
             <Button waves="light" onClick={this.updateCode.bind(this)}>Translate to Code</Button>
           </Row>
             <Row>
-              <span>Select a starting date for the backtest.</span>
-              <Input s = {12} name="on" type="date" onChange={this.setFromDate.bind(this)}/>
-            </Row>
-            <Row>
-              <span>Select an ending date for the backtest.</span>
-              <Input s = {12} name="on" type="date" onChange={this.setToDate.bind(this)}/>
+              <Input s = {6} placeholder="From date" name="on" type="date" onChange={this.setFromDate.bind(this)}/>
+              <Input s = {6} placeholder="To date" name="on" type="date" onChange={this.setToDate.bind(this)}/>
             </Row>
         </div>
         <Button waves="light" onClick={this.updateCode.bind(this)}>Translate to Code</Button>
@@ -50,15 +47,16 @@ class App extends Component {
   }
 
   setFromDate(e, v) {
-    console.log("e and v: " + e + " " + v);
+    this.setState({fromDate: v});
   }
 
   setToDate(e, v) {
-    console.log("e and v: " + e + " " + v);
+    this.setState({toDate: v});
   }
 
   updateCode() {
-    console.log("Updating code.");
+    console.log("Updating code: " + JSON.stringify(this.state));
+    // Send request, get money (get )
   }
 
   // updateCode() {

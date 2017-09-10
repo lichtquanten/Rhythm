@@ -23,7 +23,7 @@ def backtest(algo_config):
             # CONDITION COMMAND CENTER
             logic = algo['condition']['logic']
             for i in range(0, len(logic), 2):
-                conditional_truth = test_conditional(logic[i], data)
+                conditional_truth = test_conditional(logic[i], context, data)
                 if len(logic) - 1 > i:
                     if logic[i + 1] == 'or':
                         if conditional_truth:
@@ -45,7 +45,8 @@ def backtest(algo_config):
 
             # ACTION COMMAND CENTER
             if should_act:
-                ticker_symbol = symbol(algo['action']['ticker'])
+                ticker = algo['action']['ticker']
+                ticker_symbol = symbol(ticker)
                 target_change = algo['action']['amount']
                 unit = algo['action']['amount_unit']
                 # current_share_count
@@ -99,6 +100,7 @@ def initialize(context):
 
 
 def analyze(context=None, results=None):
+    final_pnl = context.portfolio.pnl
     for key in list(results):
         if key == 'algo_volatility':
             break
@@ -137,16 +139,22 @@ def analyze(context=None, results=None):
     plt.savefig('transactions.png')
 
 
-def test_conditional(conditional, data):
+def test_conditional(conditional, context, data):
+    meme = 'sma14'
+    print("YO" + str(sum(data.history(symbol(conditional['ticker']), 'close', int(meme[3:]), '1d')/int(meme[3:]))))
+
     current_price = data.current(symbol(conditional['ticker']), 'price')
     record(conditional['ticker'], current_price)
-    comparison_price = ""
     if conditional['field'] == 'close_price':
         comparison_price = data.history(symbol(conditional['ticker']), 'close', 2, '1d')[0]
     elif conditional['field'] == 'open':
         comparison_price = data.current(symbol(conditional['ticker']), 'open')
-    diff = (current_price - comparison_price) / (
-        comparison_price * 100 if conditional['threshold_type'] == 'percent' else 1)
+    elif conditional['field'][:3] == 'sma':
+        comparison_price = sum(data.history(symbol(conditional['ticker']), 'close', int(conditional['field'][3:]), '1d'))/int(conditional['field'][3:])
+    diff = (current_price - comparison_price) / (comparison_price * 100 if conditional['threshold_type'] == 'percent' else 1)
+
+    if conditional['field'] == 'earnings':
+        diff = context.porfolio.pnl
     return (conditional['threshold'] > 0 and diff > 0 or conditional['threshold'] < 0 and diff < 0) and (
         abs(diff) > abs(conditional['threshold']))
 

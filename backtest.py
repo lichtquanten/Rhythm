@@ -9,6 +9,7 @@ import seaborn as sns
 
 
 def backtest(algo_config):
+    print(algo_config)
     def handle_data(context, data):
         asset_value = context.portfolio.cash
         for key in list(context.portfolio.positions):
@@ -215,4 +216,4 @@ if __name__ == "__main__":
             }
         }
     ]
-    backtest(nlp.splitString("If MSFT falls by 0.02% at close, buy 10 share of MSFT"))
+    backtest(nlp.splitString("If MSFT falls by 0.03% at close, buy 10 share of MSFT"))

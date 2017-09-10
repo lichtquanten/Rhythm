@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for, current_app, request
 import os
+import json
 import nlp
 from flask_cors import CORS, cross_origin
 
@@ -20,7 +21,8 @@ def postData():
 @app.route('/api', methods=['GET'])
 def getNLP():
     message = request.args['text']
-    return nlp.splitString(message)
+    print(message)
+    return json.dumps(nlp.splitString(message)[0])
 
 if __name__ == '__main__':
     app.run()

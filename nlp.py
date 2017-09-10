@@ -6,7 +6,6 @@ from action import Action
 from condition import Condition
 import stocksdata
 import json
-import tweepy
 
 stockTickers = [x.lower() for x in list(stocksdata.stocks.keys())]
 stockTimes = ['yesterday', 'close', 'purchas', 'bought', 'open']
@@ -21,25 +20,39 @@ con = Condition()
 
 def splitString(message):
     message = message.lower()
-    if message.index("if") == 0:
+    m = message.split(".")
+    if len(m) > 1:
+        for i in m:
+            splitString(i)
+    #print(message)
+    if len(message) > 1 and (message.index("if") == 0 or message.index("if") == 1):
         strings = message.split(",")
-        conditions = strings[0].split("and")
-        for i in conditions:
-            analyzeString(i, "condition")
-        analyzeString(strings[1], "action")
+        conditions = strings[0].split(" ")
+        cond = ""
+        for word in conditions:
+            if word == "and":
+                analyzeString(cond, "condition", "and")
+                cond = ""
+            elif word == "or":
+                analyzeString(cond, "condition", "or")
+                cond = ""
+            else:
+                cond += word + " "
+        analyzeString(cond, "condition", "na")
+        analyzeString(strings[1], "action", "na")
 
-    print(json.dumps({**con.toJSON(), **ac.toJSON()}))
+    #print(json.dumps({**con.toJSON(), **ac.toJSON()}))
     return [{**con.toJSON(), **ac.toJSON()}]
 
 
-def analyzeString(message, condition):
+def analyzeString(message, condition, conjunction):
 
     tic = ""
     amount = ""
     verb = ""
     amount_type = "shares"
     time = ""
-
+    type = ""
     user_input = message
     letters = re.sub("[^a-zA-Z0-9%$@]", " ", user_input)
     lower_letters = letters.lower()
@@ -52,7 +65,7 @@ def analyzeString(message, condition):
     for i in pos:
         if i[0] in stockTriggers+stockTickers+stockSymbols or i[1] == 'CD':
             finalTerms.append(i)
-    print(finalTerms)
+    #print(finalTerms)
     for i in finalTerms:
         if i[0] in stockTickers and i[1] != "VB":
             tic = i[0]
@@ -77,7 +90,8 @@ def analyzeString(message, condition):
                 time = i[0]
     if condition == "condition":
 
-        con.createCondition(tic, amount, amount_type, verb, time, type)
+        con.createCondition(tic, amount, amount_type, verb, time, type, conjunction)
     else:
         ac.createAction(tic, amount, amount_type, verb)
 
+#print(splitString("If MSFT falls $3 from yesterday, buy 10 stocks of AAPL. If MSFT rises $5 from close, buy 5 stocks of AAPL."))

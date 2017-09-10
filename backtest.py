@@ -4,6 +4,7 @@ import zipline
 from zipline.api import order, order_value, order_percent, record, symbol
 import pandas as pd
 import matplotlib.pyplot as plt
+import nlp
 import seaborn as sns
 
 
@@ -155,6 +156,7 @@ def analyze(context=None, results=None):
         plt.xlabel('Time')
         plt.ylabel('Price of ' + key)
 
+"""
     transactionPoints = results.loc[results['capital_used'] != 0]
     transactionPoints = transactionPoints.reset_index()
 
@@ -182,8 +184,9 @@ def analyze(context=None, results=None):
     # Show the plot.
     plt.gcf().set_size_inches(18, 8)
     plt.show()
-
+"""
 def test_conditional(conditional, data):
+    #print(conditional)
     current_price = data.current(symbol(conditional['ticker']), 'price')
     record(conditional['ticker'], current_price)
     comparison_price = ""
@@ -213,4 +216,4 @@ if __name__ == "__main__":
             }
         }
     ]
-    backtest(demo_algo_config)
+    backtest(nlp.splitString("If MSFT falls by 5% after close AND GOOG rises 3% after close OR AAPL rises 3% after close, buy 10 shares of AMZN"))

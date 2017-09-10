@@ -3,7 +3,8 @@ import React, { Component } from 'react';
 import './App.css';
 import {Row, Input, Button} from 'react-materialize';
 import MirrorTextWithHighlighting from './components/MirrorTextWithHighlighting';
-// import request from 'superagent';
+import dateFormat from 'dateformat';
+import request from 'superagent';
 
 class App extends Component {
 
@@ -32,7 +33,6 @@ class App extends Component {
         <div id="entry">
           <Row>
             <Input onChange={this.updateAlgoText.bind(this)} s = {12} placeholder="If MSFT drops $10 from yesterday's close, buy 10 shares of MSFT" style={{"textAlign": "center", "color": "#060d14", "fontSize":"18px"}}/>
-            <Button waves="light" onClick={this.updateCode.bind(this)}>Translate to Code</Button>
           </Row>
             <Row>
               <Input s = {6} placeholder="From date" name="on" type="date" onChange={this.setFromDate.bind(this)}/>
@@ -55,8 +55,14 @@ class App extends Component {
   }
 
   updateCode() {
-    console.log("Updating code: " + JSON.stringify(this.state));
-    // Send request, get money (get )
+    const fromDate = this.state.fromDate;
+    const toDate = this.state.toDate;
+    const fixedFromDate = dateFormat(fromDate, "yyyy/mm/dd").split("/").join("-");
+    const fixedToDate = dateFormat(toDate, "yyyy/mm/dd").split("/").join("-");
+    console.log("Updating code: " + JSON.stringify(this.state) + " and " + fixedFromDate);
+    const objFit = {currentText: this.state.currentText, fromDate: fixedFromDate, fixedToDate: fixedToDate}; // yyyy/mm/dd
+    console.log('thing to send: ' + JSON.stringify(objFit));
+    // SEND REQUEST HERE!
   }
 
   // updateCode() {

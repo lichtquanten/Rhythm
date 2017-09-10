@@ -117,14 +117,14 @@ def analyze(context=None, results=None):
     plt.plot_date(transactionPoints['index'], transactionPoints['portfolio_value'])
     plt.xlabel('Time')
     plt.ylabel('Portfolio Value')
-    plt.show()
+    plt.savefig('portfolio_value.png')
 
     plt.figure()
     plt.suptitle('Stock Value vs Time')
     plt.plot(results.ending_value)
     plt.xlabel('Time')
     plt.ylabel('Stock Value')
-    plt.show()
+    plt.savefig('stock_value.png')
 
     plt.figure()
     plt.suptitle('Transactions vs Time')
@@ -134,7 +134,7 @@ def analyze(context=None, results=None):
 
     # Show the plot.
     plt.gcf().set_size_inches(18, 8)
-    plt.show()
+    plt.savefig('transactions.png')
 
 
 def test_conditional(conditional, data):

@@ -5,11 +5,14 @@ from zipline.api import order, order_value, order_percent, record, symbol
 import pandas as pd
 import matplotlib.pyplot as plt
 import nlp
+import pprint
 import seaborn as sns
 
 
 def backtest(algo_config):
-    print(algo_config)
+    pp = pprint.PrettyPrinter(indent=4)
+    pp.pprint(algo_config)
+
     def handle_data(context, data):
         asset_value = context.portfolio.cash
         for key in list(context.portfolio.positions):
@@ -41,7 +44,7 @@ def backtest(algo_config):
 
 
 
-                # ACTION COMMAND CENTER
+                    # ACTION COMMAND CENTER
             if should_act:
                 ticker_symbol = symbol(algo['action']['ticker'])
                 target_change = algo['action']['amount']
@@ -91,7 +94,8 @@ def backtest(algo_config):
                                 order_value(ticker_symbol, val)
                                 asset_value += val
                             elif unit == 'percent_ownership':
-                                val = current_amount * target_change * price if abs(target_change) < 1 else -current_amount * price
+                                val = current_amount * target_change * price if abs(
+                                    target_change) < 1 else -current_amount * price
                                 order_value(ticker_symbol, val)
                                 asset_value += val
                 # shorting
@@ -117,28 +121,34 @@ def backtest(algo_config):
                                 val = current_amount * target_change * price if current_amount * target_change * price < asset_value else asset_value
                                 order_value(ticker_symbol, -val)
                                 asset_value -= val
-                    elif target_change < 0: # short less
+                    elif target_change < 0:  # short less
                         # double check
-                        if current_amount < 0: # if currently longing, shorting less is meaningless
+                        if current_amount < 0:  # if currently longing, shorting less is meaningless
                             if unit == 'dollars':
-                                val = abs(target_change) / price if abs(target_change) / price < abs(current_amount) else abs(current_amount)
+                                val = abs(target_change) / price if abs(target_change) / price < abs(
+                                    current_amount) else abs(current_amount)
                                 order(ticker_symbol, val)
                                 asset_value += val * price
                             elif unit == 'shares':
-                                val = abs(target_change) if abs(target_change) < abs(current_amount) else abs(current_amount)
+                                val = abs(target_change) if abs(target_change) < abs(current_amount) else abs(
+                                    current_amount)
                                 order(ticker_symbol, val)
                                 asset_value += val * price
                             elif unit == 'percent_assets':
                                 # why abs(target_change) < 1?
-                                val = abs(asset_value) * abs(target_change) if abs(target_change) < 1 and abs(asset_value) * abs(target_change) < abs(current_amount) * price else abs(current_amount) * price
+                                val = abs(asset_value) * abs(target_change) if abs(target_change) < 1 and abs(
+                                    asset_value) * abs(target_change) < abs(current_amount) * price else abs(
+                                    current_amount) * price
                                 order_value(ticker_symbol, val)
                                 asset_value += val
                             elif unit == 'percent_ownership':
-                                val = abs(current_amount) * abs(target_change) if abs(target_change) < 1 else abs(current_amount)
+                                val = abs(current_amount) * abs(target_change) if abs(target_change) < 1 else abs(
+                                    current_amount)
                                 order(ticker_symbol, val)
                                 asset_value += val
 
-    zipline.run_algorithm(pd.Timestamp('2014-01-01', tz='utc'), pd.Timestamp('2014-11-01', tz='utc'), initialize, 100000, handle_data, analyze=analyze)
+    zipline.run_algorithm(pd.Timestamp('2014-01-01', tz='utc'), pd.Timestamp('2014-11-01', tz='utc'), initialize,
+                          100000, handle_data, analyze=analyze)
 
 
 # used to define context
@@ -185,8 +195,9 @@ def analyze(context=None, results=None):
     plt.gcf().set_size_inches(18, 8)
     plt.show()
 
+
 def test_conditional(conditional, data):
-    #print(conditional)
+    # print(conditional)
     current_price = data.current(symbol(conditional['ticker']), 'price')
     record(conditional['ticker'], current_price)
     comparison_price = ""
@@ -194,8 +205,11 @@ def test_conditional(conditional, data):
         comparison_price = data.history(symbol(conditional['ticker']), 'close', 2, '1d')[0]
     elif conditional['field'] == 'open':
         comparison_price = data.current(symbol(conditional['ticker']), 'open')
-    diff = (current_price - comparison_price)/(comparison_price * 100 if conditional['threshold_type'] == 'percent' else 1)
-    return (conditional['threshold'] > 0 and diff > 0 or conditional['threshold'] < 0 and diff < 0) and (abs(diff) > abs(conditional['threshold']))
+    diff = (current_price - comparison_price) / (
+        comparison_price * 100 if conditional['threshold_type'] == 'percent' else 1)
+    return (conditional['threshold'] > 0 and diff > 0 or conditional['threshold'] < 0 and diff < 0) and (
+        abs(diff) > abs(conditional['threshold']))
+
 
 if __name__ == "__main__":
     demo_algo_config = [
@@ -214,6 +228,7 @@ if __name__ == "__main__":
                     {'ticker': 'AMZN', 'field': 'open', 'threshold': 500, 'threshold_type': 'dollars'}
                 ]
             }
-        }
-    ]
-    backtest(nlp.splitString("If MSFT falls by 0.03% at close, buy 10 share of MSFT"))
+        }]
+
+
+    backtest(nlp.splitString("If AMZN rises by 0.02% from close or if AMZN rises $500 from open, then buy 2 shares of AMZN"))

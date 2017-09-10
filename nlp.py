@@ -73,7 +73,7 @@ def analyzeString(message, condition, conjunction):
             #print(i[0])
             amount = float(i[0])
         elif i[0] == '%':
-            amount_type = "percent"
+            amount_type = "percentage"
         elif i[0] == '$':
             amount_type = "dollars"
         elif i[0] in stockDecisionsPositive:
@@ -93,5 +93,3 @@ def analyzeString(message, condition, conjunction):
         con.createCondition(tic, amount, amount_type, verb, time, type, conjunction)
     else:
         ac.createAction(tic, amount, amount_type, verb)
-
-print(splitString("If MSFT falls 0.02% from close, buy 5 stocks of AAPL."))

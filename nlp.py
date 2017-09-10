@@ -20,7 +20,7 @@ con = Condition()
 
 def splitString(message):
     message = message.lower()
-    m = message.split(".")
+    m = message.split(". ")
     if len(m) > 1:
         for i in m:
             splitString(i)

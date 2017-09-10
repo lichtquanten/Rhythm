@@ -3,12 +3,14 @@
 import zipline
 from zipline.api import order, order_value, order_percent, record, symbol
 import pandas as pd
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import nlp
 import pprint
 import seaborn as sns
 
-def backtest(algo_config):
+def backtests(algo_config, start, end):
     pp = pprint.PrettyPrinter(indent=4)
     # pp.pprint(algo_config)
 
@@ -89,7 +91,7 @@ def backtest(algo_config):
                         order(ticker_symbol, val if long else -val)
                         asset_value -= val * price
 
-    zipline.run_algorithm(pd.Timestamp('2014-01-01', tz='utc'), pd.Timestamp('2014-11-01', tz='utc'), initialize,
+    zipline.run_algorithm(pd.Timestamp(start, tz='utc'), pd.Timestamp(end, tz='utc'), initialize,
                           1000, handle_data, analyze=analyze, data_frequency='daily')
 
 
@@ -156,24 +158,6 @@ def test_conditional(conditional, context, data):
         abs(diff) > abs(conditional['threshold']))
 
 
-if __name__ == "__main__":
-    demo_algo_config = [
-        {
-            'action': {
-                'ticker': 'AMZN',
-                'amount': 2,
-                'amount_unit': 'shares',
-                'position': 'long'
-            },
-            'condition': {
-                'type': 'stocky',
-                'logic': [
-                    {'ticker': 'AMZN', 'field': 'close_price', 'threshold': 0.02, 'threshold_type': 'percentage'},
-                    'or',
-                    {'ticker': 'AMZN', 'field': 'open', 'threshold': 500, 'threshold_type': 'dollars'}
-                ]
-            }
-        }]
 
 
-    backtest(nlp.splitString("If AMZN rises by 0.02% from close or if AMZN rises $500 from open, then buy 2 shares of AMZN"))
+#acktests(nlp.splitString("If AMZN rises by 0.02% from close or if AMZN rises $500 from open, then buy 2 shares of AMZN"))

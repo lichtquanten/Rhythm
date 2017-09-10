@@ -156,14 +156,13 @@ def analyze(context=None, results=None):
         plt.xlabel('Time')
         plt.ylabel('Price of ' + key)
 
-"""
     transactionPoints = results.loc[results['capital_used'] != 0]
     transactionPoints = transactionPoints.reset_index()
 
     plt.figure()
     plt.suptitle('Portfolio Value vs Time')
     plt.plot(results.portfolio_value)
-    plt.plot_date(transactionPoints.index, transactionPoints.portfolio_value )
+    plt.plot_date(transactionPoints['index'], transactionPoints['portfolio_value'])
     plt.xlabel('Time')
     plt.ylabel('Portfolio Value')
     plt.show()
@@ -184,7 +183,7 @@ def analyze(context=None, results=None):
     # Show the plot.
     plt.gcf().set_size_inches(18, 8)
     plt.show()
-"""
+
 def test_conditional(conditional, data):
     #print(conditional)
     current_price = data.current(symbol(conditional['ticker']), 'price')
@@ -216,4 +215,4 @@ if __name__ == "__main__":
             }
         }
     ]
-    backtest(nlp.splitString("If MSFT falls by 5% after close AND GOOG rises 3% after close OR AAPL rises 3% after close, buy 10 shares of AMZN"))
+    backtest(nlp.splitString("If MSFT falls by 0.02% at close, buy 10 share of MSFT"))

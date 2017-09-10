@@ -10,6 +10,8 @@ import nlp
 import pprint
 import seaborn as sns
 
+final_pnl = 0
+
 def backtests(algo_config, start, end):
     pp = pprint.PrettyPrinter(indent=4)
     # pp.pprint(algo_config)
@@ -91,7 +93,9 @@ def backtests(algo_config, start, end):
 
     zipline.run_algorithm(pd.Timestamp(start, tz='utc'), pd.Timestamp(end, tz='utc'), initialize,
                           1000, handle_data, analyze=analyze, data_frequency='daily')
-
+    return {
+        'final_pnl': final_pnl
+    }
 
 # used to define context
 # context stores the portfolio object by default
@@ -100,6 +104,7 @@ def initialize(context):
 
 
 def analyze(context=None, results=None):
+    global final_pnl
     final_pnl = context.portfolio.pnl
     for key in list(results):
         if key == 'algo_volatility':
@@ -174,4 +179,4 @@ if __name__ == "__main__":
         }]
 
 
-    backtests(nlp.splitString("If AMZN rises $1 from 30 day moving average, then buy 2 shares of AMZN."), '2011-01-11', '2011-04-11')
+    print(backtests(nlp.splitString("If AMZN rises $1 from 30 day moving average, then buy 2 shares of AMZN."), '2011-01-11', '2011-04-11'))

@@ -4,6 +4,7 @@ import json
 import nlp
 from flask_cors import CORS, cross_origin
 from backtest import backtests
+import algo_generator
 
 app = Flask(__name__)
 CORS(app)
@@ -34,7 +35,9 @@ def handle_text():
         message = request.args['text']
         start = request.args['start']
         end = request.args['end']
-        return backtests(nlp.splitString(message), start, end)
+        algo_config = nlp.splitString(message)
+        algo_generator.generate_algorithm(algo_config)
+        return backtests(algo_config, start, end)
 
 @app.route('/api', methods=['GET'])
 def getNLP():

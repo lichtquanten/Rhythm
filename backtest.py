@@ -10,10 +10,9 @@ import seaborn as sns
 
 def backtest(algo_config):
     pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(algo_config)
+    # pp.pprint(algo_config)
 
     def handle_data(context, data):
-        print(str(context.portfolio.positions[symbol('AMZN')].amount))
         asset_value = context.portfolio.cash
         for key in list(context.portfolio.positions):
             asset_value += context.portfolio.positions[key].amount * data.current(key, 'price');
@@ -44,7 +43,7 @@ def backtest(algo_config):
 
 
 
-                    # ACTION COMMAND CENTER
+            # ACTION COMMAND CENTER
             if should_act:
                 ticker_symbol = symbol(algo['action']['ticker'])
                 target_change = algo['action']['amount']

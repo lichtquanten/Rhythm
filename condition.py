@@ -37,9 +37,9 @@ class Condition:
         return "CONDITION: " + self.ticker.upper() + " " + self.verb + " by " + self.amount + " from " + self.time + ". This is a " + self.cond + " change"
 
     def toJSON(self):
-        print(self.conditions)
+        # print(self.conditions)
         return {"condition":{'type': 'stocky', 'logic':self.conditions}}
-""" 
+"""
 'condition': {
         'type': 'stocky',
         'payload': {

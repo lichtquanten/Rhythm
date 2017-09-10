@@ -48,7 +48,7 @@ def splitString(message):
 def analyzeString(message, condition, conjunction):
 
     tic = ""
-    amount = ""
+    amount = 0
     verb = ""
     amount_type = "shares"
     time = ""
@@ -63,35 +63,40 @@ def analyzeString(message, condition, conjunction):
     pos = nltk.pos_tag(text)
     finalTerms = []
     for i in pos:
-        if i[0] in stockTriggers+stockTickers+stockSymbols or i[1] == 'CD':
+        if i[0] in stockTriggers+stockTickers+stockSymbols+['day', 'earnings'] or i[1] == 'CD':
             finalTerms.append(i)
-    #print(finalTerms)
-    for i in finalTerms:
-        if i[0] in stockTickers and i[1] != "VB":
-            tic = i[0]
-        elif i[1] == 'CD':
-            amount += i[0]
-        elif i[0] == '%':
+    for i in range(len(finalTerms)):
+        val = finalTerms[i][0]
+        if val in stockTickers and finalTerms[i][1] != "VB":
+            tic = val
+        elif finalTerms[i][1] == 'CD':
+            if finalTerms[i+1][0] == 'day':
+                sma_days = val
+            else:
+                amount += float(val)
+        elif val == '%':
             amount_type = "percent"
-        elif i[0] == '$':
+        elif val == '$':
             amount_type = "dollars"
-        elif i[0] in stockDecisionsPositive:
-            verb = i[0]
+        elif val in stockDecisionsPositive:
+            verb = val
             type = True
-        elif i[0] in stockDecisionsNegative:
-            verb = i[0]
+        elif val in stockDecisionsNegative:
+            verb = val
             type = False
-        elif i[0] in stockActions:
-            verb = i[0]
-        elif i[0] in stockTimes:
-            if i[0] == "purchas":
+        elif val in stockActions:
+            verb = val
+        # elif val in ['earnings', 'profit']
+        elif val in stockTimes:
+            if val == "purchas":
                 time = "purchase"
-            elif i[0] == "move":
+            elif val == "move":
                 time = "sma"
             else:
-                time = i[0]
+                time = val
     if condition == "condition":
-
+        if time == 'sma':
+            time = 'sma' + str(sma_days)
         con.createCondition(tic, amount, amount_type, verb, time, type, conjunction)
     else:
         ac.createAction(tic, amount, amount_type, verb)

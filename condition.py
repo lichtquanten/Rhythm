@@ -17,7 +17,6 @@ class Condition:
 
         self.verb = verb
         self.amount_type = amount_type
-
         if type == True:
             self.amount = amount
         else:
@@ -26,7 +25,10 @@ class Condition:
             self.time = "close_price"
         elif time == "open":
             self.time = "open"
+        elif time[:3] == "sma":
+            self.time = time
         self.conditions.append({"ticker": self.ticker.upper(), "field":self.time, 'threshold': self.amount, 'threshold_type':self.amount_type})
+        print(self.conditions)
         if conjunction != "na":
             self.conditions.append(conjunction)
 

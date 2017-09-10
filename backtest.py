@@ -40,10 +40,8 @@ def backtests(algo_config, start, end):
                             should_act = False
                             break
                 else:
-                    should_act = False
+                    should_act = conditional_truth
                     break
-
-
 
             # ACTION COMMAND CENTER
             if should_act:
@@ -140,7 +138,6 @@ def analyze(context=None, results=None):
     plt.gcf().set_size_inches(18, 8)
     plt.savefig('transactions.png')
 
-
 def test_conditional(conditional, context, data):
     current_price = data.current(symbol(conditional['ticker']), 'price')
     record(conditional['ticker'], current_price)
@@ -156,8 +153,25 @@ def test_conditional(conditional, context, data):
         diff = context.porfolio.pnl
     return (conditional['threshold'] > 0 and diff > 0 or conditional['threshold'] < 0 and diff < 0) and (
         abs(diff) > abs(conditional['threshold']))
-
-
-
-
 #acktests(nlp.splitString("If AMZN rises by 0.02% from close or if AMZN rises $500 from open, then buy 2 shares of AMZN"))
+if __name__ == "__main__":
+    demo_algo_config = [
+        {
+            'action': {
+                'ticker': 'AMZN',
+                'amount': 2,
+                'amount_unit': 'shares',
+                'position': 'long'
+            },
+            'condition': {
+                'type': 'stocky',
+                'logic': [
+                    {'ticker': 'AMZN', 'field': 'close_price', 'threshold': 0.02, 'threshold_type': 'percentage'},
+                    'or',
+                    {'ticker': 'AMZN', 'field': 'open', 'threshold': 500, 'threshold_type': 'dollars'}
+                ]
+            }
+        }]
+
+
+    backtests(nlp.splitString("If AMZN rises $1 from 30 day moving average, then buy 2 shares of AMZN."), '2011-01-11', '2011-04-11')

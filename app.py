@@ -34,7 +34,7 @@ def handle_text():
         message = request.args['text']
         start = request.args['start']
         end = request.args['end']
-        return backtests(nlp.splitString(message), start, end)
+        return json.dumps(backtests(nlp.splitString(message), start, end))
 
 @app.route('/api', methods=['GET'])
 def getNLP():

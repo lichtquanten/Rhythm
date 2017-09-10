@@ -15,10 +15,9 @@ stockActions = ["buy", "sell", "short"]
 stockSymbols = ["$", "%"]
 stockTriggers = stockTimes + stockDecisionsPositive + stockDecisionsNegative + stockActions
 
-ac = Action()
-con = Condition()
-
 def splitString(message):
+    ac = Action()
+    con = Condition()
     message = message.lower()
     m = message.split(". ")
     if len(m) > 1:
@@ -38,14 +37,14 @@ def splitString(message):
                 cond = ""
             else:
                 cond += word + " "
-        analyzeString(cond, "condition", "na")
-        analyzeString(strings[1], "action", "na")
+        analyzeString(cond, "condition", "na", con, ac)
+        analyzeString(strings[1], "action", "na", con, ac)
 
     #print(json.dumps({**con.toJSON(), **ac.toJSON()}))
     return [{**con.toJSON(), **ac.toJSON()}]
 
 
-def analyzeString(message, condition, conjunction):
+def analyzeString(message, condition, conjunction, con, ac):
 
     tic = ""
     amount = 0
@@ -54,7 +53,7 @@ def analyzeString(message, condition, conjunction):
     time = ""
     type = ""
     user_input = message
-    letters = re.sub("[^a-zA-Z0-9%$@]", " ", user_input)
+    letters = re.sub("[^a-zA-Z0-9%$@.]", " ", user_input)
     lower_letters = letters.lower()
 
     allwords = [stem(w) for w in lower_letters.split() if not w in stopwords.words("english")]
@@ -67,6 +66,7 @@ def analyzeString(message, condition, conjunction):
             finalTerms.append(i)
     for i in range(len(finalTerms)):
         val = finalTerms[i][0]
+        print(val)
         if val in stockTickers and finalTerms[i][1] != "VB":
             tic = val
         elif finalTerms[i][1] == 'CD':
@@ -75,7 +75,7 @@ def analyzeString(message, condition, conjunction):
             else:
                 amount += float(val)
         elif val == '%':
-            amount_type = "percent"
+            amount_type = "percentage"
         elif val == '$':
             amount_type = "dollars"
         elif val in stockDecisionsPositive:

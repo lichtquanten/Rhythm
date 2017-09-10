@@ -1,3 +1,42 @@
+body {
+  background-color: white;
+  background-size: cover;
+  color: #30cd9a;
+  font-family: "Avenir Next";
+}
+
+h1 {
+  margin-top: 30px;
+  font-size: 70px;
+  font-family: "Raleway", "Avenir Next";
+}
+
+h3 {
+  margin-top: 15px;
+  font-size: 35px;
+  font-family: "Montserrat", "Avenir Next";
+}
+
+.header {
+  display: inline-block;
+}
+
+.header h1 h3 {
+  text-align: left;
+}
+
+.instructions {
+  padding: 20px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 100px;
+}
+
+.instructions p {
+  font-size: 18px;
+  color: #060d14;
+  font-family: "Montserrat", "Avenir Next";
+}
 .App {
   text-align: center;
 }
@@ -16,6 +55,11 @@
 
 .App-intro {
   font-size: large;
+}
+
+#entry Button{
+  font-size: 16px;
+    background-color: #30cd9a;
 }
 
 @keyframes App-logo-spin {

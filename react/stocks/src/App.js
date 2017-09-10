@@ -19,16 +19,18 @@ class App extends Component {
     return (
       <div className="App">
         <div className="container">
-        <div style = {{"textAlign": "center", "marginTop": "100px"}}>
-            <h1>Algorithm</h1>
-            <h3>Algorithm trading for the masses.</h3>
-            <p>1. Enter a sentence in any natural language, preferably English.</p>
-            <p>2. Watch how well your algorithm scores compared to others.</p>
-            <p>3. Get money.</p>
-        </div>
+            <div className="header" style={{"width": "50%", "text-align": "left", "marginTop": "100px"}}>
+                <h1>AlgoTrader</h1>
+                <h3>Algorithm trading for the masses.</h3>
+            </div>
+            <div className="instructions" style={{"width": "40%", "text-align": "left", "marginTop": "100px"}}>
+                <p>1. Enter a sentence in any natural language, preferably English.</p>
+                <p>2. Watch how well your algorithm scores compared to others.</p>
+                <p>3. Make money.</p>
+            </div>
         <div id="entry">
           <Row>
-            <Input onChange={this.updateAlgoText.bind(this)} s = {12} placeholder="If MSFT drops $10 from yesterday's close, buy 10 shares of MSFT" style={{"color": "white"}}/>
+            <Input onChange={this.updateAlgoText.bind(this)} s = {12} placeholder="If MSFT drops $10 from yesterday's close, buy 10 shares of MSFT" style={{"color": "#060d14", "fontSize":"18px"}}/>
             <Button waves="light" onClick={this.updateCode.bind(this)}>Translate to Code</Button>
           </Row>
           <MirrorTextWithHighlighting showText = {this.state.currentText}/>

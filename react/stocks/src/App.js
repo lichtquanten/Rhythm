@@ -5,7 +5,6 @@ import {Row, Input, Button} from 'react-materialize';
 import MirrorTextWithHighlighting from './components/MirrorTextWithHighlighting';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import dateFormat from 'dateformat';
-import request from 'superagent';
 
 class App extends Component {
 
@@ -43,10 +42,16 @@ class App extends Component {
         <Button waves="light" onClick={this.updateCode.bind(this)}>Translate to Code</Button>
         <MirrorTextWithHighlighting showText = {this.state.currentText}/>
         <Row>
-          <img src="portfolio_value.png"/>
+            <br></br>
+            <br></br>
+            <br></br>
+          <img style={{"display": "inline-block"}} width="50%" src="portfolio_value.png"/>
+            <img style={{"display": "inline-block"}} width="50%" src="stock_value.png"/>
+            <img width="100%" src="transactions.png"/>
         </Row>
        
-          <Button> <a href="algorithm.py" download> Download algorithm! </a></Button>
+          <Button> <a href="algorithm.py" style={{"color": "white"}} download> Download algorithm! </a></Button>
+            <br></br><br></br>
         </div>
       </div>
     );
@@ -71,7 +76,7 @@ class App extends Component {
     console.log("Updating code: " + JSON.stringify(this.state) + " and " + fixedFromDate);
     const objFit = {currentText: this.state.currentText, fromDate: fixedFromDate, fixedToDate: fixedToDate}; // yyyy/mm/dd
     console.log('thing to send: ' + JSON.stringify(objFit));
-    fetch("http://a306cf12.ngrok.io/api/text", {
+    fetch("http://127.0.0.1:5000/api/text", {
       method: 'POST',
       body: 'text=' + this.state.currentText + '&start=' + fixedFromDate + '&end=' + fixedToDate,
       headers: {

@@ -30,14 +30,31 @@ class App extends Component {
             </div>
         <div id="entry">
           <Row>
-            <Input onChange={this.updateAlgoText.bind(this)} s = {12} placeholder="If MSFT drops $10 from yesterday's close, buy 10 shares of MSFT" style={{"color": "#060d14", "fontSize":"18px"}}/>
+            <Input onChange={this.updateAlgoText.bind(this)} s = {12} placeholder="If MSFT drops $10 from yesterday's close, buy 10 shares of MSFT" style={{"textAlign": "center", "color": "#060d14", "fontSize":"18px"}}/>
             <Button waves="light" onClick={this.updateCode.bind(this)}>Translate to Code</Button>
           </Row>
-          <MirrorTextWithHighlighting showText = {this.state.currentText}/>
+            <Row>
+              <span>Select a starting date for the backtest.</span>
+              <Input s = {12} name="on" type="date" onChange={this.setFromDate.bind(this)}/>
+            </Row>
+            <Row>
+              <span>Select an ending date for the backtest.</span>
+              <Input s = {12} name="on" type="date" onChange={this.setToDate.bind(this)}/>
+            </Row>
         </div>
-    </div>
+        <Button waves="light" onClick={this.updateCode.bind(this)}>Translate to Code</Button>
+        <MirrorTextWithHighlighting showText = {this.state.currentText}/>
+        </div>
       </div>
     );
+  }
+
+  setFromDate(e, v) {
+    console.log("e and v: " + e + " " + v);
+  }
+
+  setToDate(e, v) {
+    console.log("e and v: " + e + " " + v);
   }
 
   updateCode() {
